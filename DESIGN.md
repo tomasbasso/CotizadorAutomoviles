@@ -35,6 +35,10 @@ Solo Sora (300 a 700), en la pantalla y en el PDF. Títulos en 700 con tracking 
 - Inputs: 44 px de alto, radio de 8 px, borde `linea`. El foco pasa el borde a rojo y suma un anillo rojo al 15%.
 - Acción principal: fondo rojo, sombra roja desplazada hacia abajo, hover en rojo-oscuro. Desactivada se ve en `linea` con texto #7d7175.
 - Chips (franquicia, Recomendada): forma de píldora. Activos (`aria-pressed`), van en rojo con texto blanco.
+- Selector Auto / Retiro: píldora en `fondo` arriba de la columna de carga; la sección actual va en blanco con sombra suave.
+- Segmentos (sexo F/M/X, Pesos/Dólares): botones unidos sobre `fondo`; el elegido va en blanco con texto rojo.
+- Edad de retiro: input centrado de 56 px con botones − y + a los costados.
+- Resultado de cada opción de retiro: caja `rosa` con la renta mensual estimada en grande y fondos acumulados, tiempo de ahorro y total aportado al lado. Si falta un dato, caja `fondo` con lo que falta; si un valor está fuera de rango, mensaje en rojo oscuro con el rango válido.
 
 ## PDF (A4)
 
@@ -44,3 +48,13 @@ Solo Sora (300 a 700), en la pantalla y en el PDF. Títulos en 700 con tracking 
 4. Tabla comparativa agrupada, con tildes, notas en rojo ("Hasta 10%") y guion gris donde no cubre. Accidente total y Accidente parcial se muestran siempre y, donde faltan, dicen "No cubre". La columna recomendada lleva fondo rosa. Con 3 opciones entra entera en la hoja 1.
 5. Hoja 2: glosario en dos columnas parejas con los textos oficiales de La Segunda (Accidente parcial suma el ejemplo del perro), más la aclaración legal.
 6. Pie fijo con el isotipo, la agencia, los datos de contacto y la numeración de página.
+
+## PDF de retiro (A4, dos hojas)
+
+1. La misma franja roja y el mismo pie.
+2. "Proyección de retiro para {cliente}", moneda y edad, fecha y número.
+3. Hasta 3 tarjetas de opción. Arriba, "OPCIÓN N" o el chip blanco "RECOMENDADA" (la recomendada va en rojo lleno). Después, lado a lado, "Ahorrás por mes" y "Te retirás a los"; la renta mensual estimada en grande (achica la letra si la cifra es muy larga), y abajo fondos acumulados, tiempo de ahorro y total aportado. Con una sola opción, la tarjeta se arma a lo ancho.
+4. "Con qué datos se calculó", en grilla de dos columnas: plan, moneda (en dólares, con la aclaración del tipo de cambio del BNA), fecha de nacimiento y edad, sexo, tasa de proyección con el mínimo garantizado, y gastos sobre cada aporte con su detalle.
+5. "Qué significa cada número", con los textos oficiales de las ayudas del cotizador online de La Segunda.
+6. Hoja 2: "Lo que tenés que saber" en grilla de dos columnas (sacar la plata cuando quiera, cómo cobrar al retirarse, fallecimiento, dejar de aportar, beneficios impositivos, seguimiento online).
+7. "Cómo rindió la cartera": fila con el rendimiento del último mes y de 3, 6, 12 y 24 meses, en cifras grandes con dos decimales, más la aclaración del informe mensual. Al final, la aclaración legal.

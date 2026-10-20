@@ -33,6 +33,7 @@ No es el cotizador de la compañía: los precios los pone el productor, que cono
 - Hasta 3 opciones por PDF. Se puede repetir el mismo plan con distinto precio o franquicia.
 - Datos por cotización: nombre del cliente, vehículo (marca, modelo, versión), año, plan, precio y franquicia (solo Plan 30 / Todo Riesgo).
 - Solo autos y pick-ups (8 planes). Motos y camiones fuera de alcance por ahora.
+- Retiro (pestaña aparte): nombre, fecha de nacimiento (18 a 65 años, según la hoja de Retiro para agencias) y sexo del DNI, moneda (pesos o dólares) y hasta 3 opciones de ahorro mensual con su edad de retiro (de la edad actual + 5 a 85). La renta mensual y los fondos acumulados se calculan con la fórmula, tasas y tabla del cotizador online de La Segunda, descontando además los gastos del plan Futuro Protegido (`datos/retiro.json`). Son estimaciones: el PDF lo aclara con los textos oficiales, informa el mínimo garantizado y muestra el rendimiento real de la cartera del último informe mensual.
 - Sin historial, login ni base de datos.
 - Pendiente de confirmar: si el precio es mensual, y los datos de contacto de la agencia (productor, matrícula SSN, teléfono, dirección).
 

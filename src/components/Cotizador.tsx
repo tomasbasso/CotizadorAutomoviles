@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { CircleAlert, Download, Eye, LoaderCircle, Plus, RotateCcw, Share2, Star, X } from "lucide-react";
-import { type ButtonHTMLAttributes, type ReactNode, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { CircleAlert, Plus, Star, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   type Cotizacion,
   MAX_OPCIONES,
@@ -27,28 +26,25 @@ import {
   celdaDe,
   planPorCodigo,
 } from "@/lib/planes";
-import { conBase } from "@/lib/rutas";
+import {
+  BarraAcciones,
+  BotonReiniciar,
+  Campo,
+  PanelVistaPrevia,
+  Pantalla,
+  Secciones,
+  VistaVacia,
+  textoFaltantes,
+  estiloInput,
+  useAccionesPDF,
+  useMedia,
+  usePuedeCompartir,
+  useVistaPrevia,
+} from "./comun";
 
 type Datos = Omit<Cotizacion, "numero" | "fecha">;
-type Accion = "descargar" | "compartir" | "ver";
 
 const DATOS_INICIALES: Datos = { cliente: "", vehiculo: "", anio: "", periodo: "mes", opciones: [] };
-
-const MOSAICO = ["........cv", "......cvov", "....cv.vco", "..cvoc.ovo", "cvovcovcov"];
-const COLOR_MOSAICO: Record<string, string> = {
-  o: "bg-rojo-oscuro",
-  v: "bg-rojo-vivo",
-  c: "bg-rojo-claro",
-  ".": "bg-transparent",
-};
-
-const estiloInput =
-  "h-11 w-full rounded-lg border border-linea bg-white px-3.5 text-[15px] text-tinta placeholder:text-[#7d7175] transition-[border-color,box-shadow] duration-200 hover:border-[#dccdd2] focus:border-rojo focus:ring-[3px] focus:ring-rojo/15 focus-visible:outline-none";
-
-function enumerar(items: string[]): string {
-  if (items.length <= 1) return items.join("");
-  return `${items.slice(0, -1).join(", ")} y ${items.at(-1)}`;
-}
 
 async function armarArchivo(datos: Datos): Promise<File> {
   const fecha = new Date();
@@ -58,78 +54,13 @@ async function armarArchivo(datos: Datos): Promise<File> {
   return new File([blob], nombreArchivo(cotizacion), { type: "application/pdf" });
 }
 
-function useMedia(consulta: string): boolean {
-  return useSyncExternalStore(
-    (avisar) => {
-      const m = window.matchMedia(consulta);
-      m.addEventListener("change", avisar);
-      return () => m.removeEventListener("change", avisar);
-    },
-    () => window.matchMedia(consulta).matches,
-    () => false,
-  );
-}
-
-let archivoDePrueba: File | null = null;
-function puedeCompartirArchivos(): boolean {
-  if (typeof navigator === "undefined" || !navigator.canShare) return false;
-  archivoDePrueba ??= new File([""], "prueba.pdf", { type: "application/pdf" });
-  return navigator.canShare({ files: [archivoDePrueba] });
-}
-const sinSuscripcion = () => () => {};
-
-function usePuedeCompartir(): boolean {
-  return useSyncExternalStore(sinSuscripcion, puedeCompartirArchivos, () => false);
-}
-
-/** Regenera el PDF mientras se edita y mantiene el anterior visible hasta que el nuevo termina de cargar. */
-function useVistaPrevia(datos: Datos, activa: boolean) {
-  const [capas, setCapas] = useState<string[]>([]);
-  const [cargando, setCargando] = useState(false);
-  const pedido = useRef(0);
-
-  useEffect(() => {
-    if (!activa || datos.opciones.length === 0) return;
-    const numero = ++pedido.current;
-    const espera = setTimeout(async () => {
-      setCargando(true);
-      try {
-        const archivo = await armarArchivo(datos);
-        if (numero !== pedido.current) return;
-        const url = URL.createObjectURL(archivo);
-        setCapas((previas) => {
-          previas.slice(0, -1).forEach((u) => URL.revokeObjectURL(u));
-          return [...previas.slice(-1), url];
-        });
-      } catch (error) {
-        console.error("No se pudo armar la vista previa", error);
-      } finally {
-        if (numero === pedido.current) setCargando(false);
-      }
-    }, 350);
-    return () => clearTimeout(espera);
-  }, [datos, activa]);
-
-  const alCargar = useCallback((url: string) => {
-    setCapas((previas) => {
-      const i = previas.indexOf(url);
-      if (i <= 0) return previas;
-      previas.slice(0, i).forEach((u) => URL.revokeObjectURL(u));
-      return previas.slice(i);
-    });
-  }, []);
-
-  return { capas, cargando, alCargar };
-}
-
 export function Cotizador() {
   const [datos, setDatos] = useState<Datos>(DATOS_INICIALES);
   const [enfocar, setEnfocar] = useState<string | null>(null);
-  const [accion, setAccion] = useState<Accion | null>(null);
-  const [error, setError] = useState("");
   const escritorio = useMedia("(min-width: 1024px)");
   const puedeCompartir = usePuedeCompartir();
-  const vista = useVistaPrevia(datos, escritorio);
+  const armar = useMemo(() => (datos.opciones.length > 0 ? () => armarArchivo(datos) : null), [datos]);
+  const vista = useVistaPrevia(armar, escritorio);
 
   // Solo en desarrollo: /?demo precarga una cotización de ejemplo para revisar el PDF.
   useEffect(() => {
@@ -161,8 +92,17 @@ export function Cotizador() {
   const lista = falta.length === 0;
   const hayDatos = Boolean(datos.cliente || datos.vehiculo || datos.anio || datos.opciones.length);
 
+  const acciones = useAccionesPDF(
+    () => armarArchivo(datos),
+    () => {
+      const nombre = datos.cliente.trim().split(/\s+/)[0];
+      return `Hola ${nombre}, te paso la cotización del seguro para tu ${datos.vehiculo.trim()}.`;
+    },
+    lista,
+  );
+
   const actualizar = (cambio: Partial<Datos>) => {
-    setError("");
+    acciones.limpiarError();
     setDatos((d) => ({ ...d, ...cambio }));
   };
 
@@ -189,307 +129,138 @@ export function Cotizador() {
   const reiniciar = () => {
     if (hayDatos && !window.confirm("¿Borrar esta cotización y empezar una nueva?")) return;
     setDatos(DATOS_INICIALES);
-    setError("");
+    acciones.limpiarError();
   };
 
-  const ejecutar = async (tipo: Accion) => {
-    if (!lista || accion) return;
-    setError("");
-    setAccion(tipo);
-    // La pestaña se abre antes de generar para que el navegador no la bloquee.
-    const pestana = tipo === "ver" ? window.open("", "_blank") : null;
-    if (tipo === "ver" && !pestana) {
-      setAccion(null);
-      setError("El navegador no dejó abrir una pestaña nueva. Probá con Descargar.");
-      return;
-    }
-    try {
-      const archivo = await armarArchivo(datos);
-      if (tipo === "compartir") {
-        const nombre = datos.cliente.trim().split(/\s+/)[0];
-        await navigator.share({
-          files: [archivo],
-          title: archivo.name,
-          text: `Hola ${nombre}, te paso la cotización del seguro para tu ${datos.vehiculo.trim()}.`,
-        });
-        return;
-      }
-      const url = URL.createObjectURL(archivo);
-      if (pestana) {
-        pestana.location.href = url;
-      } else {
-        const enlace = document.createElement("a");
-        enlace.href = url;
-        enlace.download = archivo.name;
-        enlace.click();
-      }
-      setTimeout(() => URL.revokeObjectURL(url), 60_000);
-    } catch (e) {
-      pestana?.close();
-      if (e instanceof DOMException && e.name === "AbortError") return;
-      console.error(e);
-      setError("No se pudo generar el PDF. Probá de nuevo y, si sigue fallando, recargá la página.");
-    } finally {
-      setAccion(null);
-    }
-  };
-
-  const estado = error
-    ? error
-    : lista
-      ? `Lista para enviar · ${datos.opciones.length} ${datos.opciones.length === 1 ? "opción" : "opciones"}`
-      : `Falta ${enumerar(falta)}.`;
+  const estado = lista
+    ? `Lista para enviar · ${datos.opciones.length} ${datos.opciones.length === 1 ? "opción" : "opciones"}`
+    : textoFaltantes(falta);
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <Encabezado />
-
-      <main className="mx-auto grid w-full max-w-[1680px] flex-1 grid-cols-1 lg:h-[calc(100dvh-4rem)] lg:grid-cols-[minmax(0,640px)_minmax(0,1fr)]">
-        <section className="flex min-h-0 flex-col bg-white lg:border-r lg:border-linea">
-          <div className="flex-1 space-y-10 px-4 pt-8 pb-10 sm:px-8 lg:overflow-y-auto">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h1 className="text-[26px] leading-tight font-bold tracking-[-0.02em] text-balance">Nueva cotización</h1>
-                <p className="mt-1.5 max-w-[48ch] text-[15px] leading-relaxed text-suave">
-                  Cargá el cliente y el vehículo, elegí hasta {MAX_OPCIONES} planes y poné el precio de cada uno.
-                </p>
-              </div>
-              {hayDatos && (
-                <button
-                  type="button"
-                  onClick={reiniciar}
-                  aria-label="Empezar de nuevo"
-                  className="inline-flex size-9 shrink-0 items-center justify-center gap-1.5 rounded-full text-[13px] font-medium text-suave transition-colors hover:bg-fondo hover:text-tinta sm:w-auto sm:px-3"
-                >
-                  <RotateCcw size={14} aria-hidden />
-                  <span className="hidden sm:inline">Empezar de nuevo</span>
-                </button>
-              )}
-            </div>
-
-            <section aria-labelledby="titulo-cliente" className="space-y-4">
-              <h2 id="titulo-cliente" className="text-base font-semibold">
-                Cliente y vehículo
-              </h2>
-              <Campo etiqueta="Nombre y apellido">
-                <input
-                  className={estiloInput}
-                  value={datos.cliente}
-                  onChange={(e) => actualizar({ cliente: e.target.value })}
-                  placeholder="Ej.: María Gómez"
-                  autoComplete="off"
-                  enterKeyHint="next"
-                />
-              </Campo>
-              <div className="grid grid-cols-[minmax(0,1fr)_96px] gap-3 sm:grid-cols-[minmax(0,1fr)_120px]">
-                <Campo etiqueta="Vehículo">
-                  <input
-                    className={estiloInput}
-                    value={datos.vehiculo}
-                    onChange={(e) => actualizar({ vehiculo: e.target.value })}
-                    placeholder="Ej.: Toyota Hilux 2.8 SRX 4x4"
-                    autoComplete="off"
-                    enterKeyHint="next"
-                  />
-                </Campo>
-                <Campo etiqueta="Año">
-                  <input
-                    className={`${estiloInput} tabular-nums`}
-                    value={datos.anio}
-                    onChange={(e) => actualizar({ anio: e.target.value.replace(/\D/g, "").slice(0, 4) })}
-                    placeholder="2022"
-                    inputMode="numeric"
-                    autoComplete="off"
-                  />
-                </Campo>
-              </div>
-            </section>
-
-            <section aria-labelledby="titulo-planes" className="space-y-4">
-              <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
-                <div>
-                  <h2 id="titulo-planes" className="text-base font-semibold">
-                    Planes de La Segunda
-                  </h2>
-                  <p className="mt-1 text-[13px] text-suave">
-                    De más a menos cobertura. Tocá un plan para sumarlo.
-                  </p>
-                </div>
-                <label className="flex items-center gap-2 text-[13px] text-suave">
-                  Precios
-                  <select
-                    value={datos.periodo}
-                    onChange={(e) => actualizar({ periodo: e.target.value as Periodo })}
-                    className="h-9 rounded-full border border-linea bg-white pr-8 pl-3 text-[13px] font-medium text-tinta hover:border-[#dccdd2] focus:border-rojo focus:ring-[3px] focus:ring-rojo/15 focus-visible:outline-none"
-                  >
-                    {PERIODOS.map((p) => (
-                      <option key={p.valor} value={p.valor}>
-                        {p.texto}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-
-              {datos.opciones.length >= MAX_OPCIONES && (
-                <p className="rounded-lg bg-rosa px-3.5 py-2.5 text-[13px] text-rojo-oscuro">
-                  Ya tenés {MAX_OPCIONES} opciones. Quitá una para sumar otro plan.
-                </p>
-              )}
-
-              <ol className="divide-y divide-linea overflow-hidden rounded-xl border border-linea">
-                {PLANES.map((plan) => (
-                  <FilaPlan
-                    key={plan.codigo}
-                    plan={plan}
-                    opciones={datos.opciones}
-                    periodo={datos.periodo}
-                    enfocar={enfocar}
-                    alEnfocar={() => setEnfocar(null)}
-                    onAgregar={() => agregar(plan)}
-                    onCambiar={cambiarOpcion}
-                    onQuitar={quitar}
-                  />
-                ))}
-              </ol>
-            </section>
+    <Pantalla
+      barra={
+        <BarraAcciones
+          estado={estado}
+          error={acciones.error}
+          lista={lista}
+          accion={acciones.accion}
+          puedeCompartir={puedeCompartir}
+          ejecutar={acciones.ejecutar}
+        />
+      }
+      vistaPrevia={
+        <PanelVistaPrevia
+          vista={vista}
+          titulo="Vista previa de la cotización"
+          vacio={
+            datos.opciones.length === 0 ? (
+              <VistaVacia
+                titulo="Todavía no elegiste planes"
+                texto="Tocá un plan de la lista y la cotización aparece acá, tal cual le va a llegar al cliente."
+              />
+            ) : null
+          }
+        />
+      }
+    >
+      <div className="space-y-6">
+        <Secciones actual="auto" />
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-[26px] leading-tight font-bold tracking-[-0.02em] text-balance">Nueva cotización</h1>
+            <p className="mt-1.5 max-w-[48ch] text-[15px] leading-relaxed text-suave">
+              Cargá el cliente y el vehículo, elegí hasta {MAX_OPCIONES} planes y poné el precio de cada uno.
+            </p>
           </div>
-
-          <div className="sticky bottom-0 z-10 border-t border-linea bg-white px-4 py-3 sm:px-8">
-            <div className="flex items-center gap-3">
-              <p
-                aria-live="polite"
-                className={`min-w-0 flex-1 text-[13px] leading-snug ${error ? "font-medium text-rojo" : "text-suave"}`}
-              >
-                {estado}
-              </p>
-              <div className="flex shrink-0 items-center gap-2 lg:hidden">
-                <BotonSecundario onClick={() => ejecutar("ver")} disabled={!lista || !!accion} cargando={accion === "ver"}>
-                  <Eye size={16} aria-hidden />
-                  Ver
-                </BotonSecundario>
-                {puedeCompartir ? (
-                  <BotonPrimario
-                    onClick={() => ejecutar("compartir")}
-                    disabled={!lista || !!accion}
-                    cargando={accion === "compartir"}
-                  >
-                    <Share2 size={16} aria-hidden />
-                    Compartir
-                  </BotonPrimario>
-                ) : (
-                  <BotonPrimario
-                    onClick={() => ejecutar("descargar")}
-                    disabled={!lista || !!accion}
-                    cargando={accion === "descargar"}
-                  >
-                    <Download size={16} aria-hidden />
-                    Descargar
-                  </BotonPrimario>
-                )}
-              </div>
-              <div className="hidden shrink-0 items-center gap-2 lg:flex">
-                {puedeCompartir && (
-                  <BotonSecundario
-                    onClick={() => ejecutar("compartir")}
-                    disabled={!lista || !!accion}
-                    cargando={accion === "compartir"}
-                  >
-                    <Share2 size={16} aria-hidden />
-                    Compartir
-                  </BotonSecundario>
-                )}
-                <BotonPrimario
-                  onClick={() => ejecutar("descargar")}
-                  disabled={!lista || !!accion}
-                  cargando={accion === "descargar"}
-                >
-                  <Download size={16} aria-hidden />
-                  Descargar PDF
-                </BotonPrimario>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <aside aria-label="Vista previa del PDF" className="hidden min-h-0 flex-col bg-[#ece5e8] p-6 lg:flex xl:p-8">
-          <div className="flex h-8 items-center justify-between pb-3">
-            <h2 className="text-sm font-semibold">Así lo va a ver tu cliente</h2>
-            {vista.cargando && (
-              <span className="inline-flex items-center gap-1.5 text-[13px] text-suave">
-                <LoaderCircle size={14} className="animate-spin" aria-hidden />
-                Actualizando
-              </span>
-            )}
-          </div>
-          <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl bg-white shadow-[0_2px_4px_rgba(35,26,29,0.06),0_24px_48px_-24px_rgba(35,26,29,0.4)]">
-            {datos.opciones.length === 0 ? (
-              <VistaVacia />
-            ) : vista.capas.length === 0 ? (
-              <div className="grid h-full place-items-center text-[13px] text-suave">
-                <span className="inline-flex items-center gap-2">
-                  <LoaderCircle size={16} className="animate-spin" aria-hidden />
-                  Armando el PDF…
-                </span>
-              </div>
-            ) : (
-              vista.capas.map((url, i) => {
-                const visible = i === 0;
-                return (
-                  <iframe
-                    key={url}
-                    src={`${url}#toolbar=0&navpanes=0&view=FitH`}
-                    title="Vista previa de la cotización"
-                    onLoad={() => vista.alCargar(url)}
-                    className={`absolute inset-0 h-full w-full ${visible ? "" : "pointer-events-none opacity-0"}`}
-                  />
-                );
-              })
-            )}
-          </div>
-        </aside>
-      </main>
-    </div>
-  );
-}
-
-function Encabezado() {
-  return (
-    <header className="sticky top-0 z-20 bg-rojo text-white lg:static">
-      <div className="mx-auto flex h-16 max-w-[1680px] items-center justify-between pl-4 sm:pl-8">
-        <div className="flex min-w-0 items-center gap-4 sm:gap-6">
-          <Image
-            src={conBase("/marca/logo-blanco.png")}
-            alt="La Segunda Seguros"
-            width={1891}
-            height={435}
-            priority
-            className="h-6 w-auto sm:h-7"
-          />
-          <span className="border-l-[3px] border-white pl-3 text-[13px] font-bold tracking-[2px] whitespace-nowrap uppercase sm:text-base">
-            Agencia Winifreda
-          </span>
+          {hayDatos && <BotonReiniciar onClick={reiniciar} />}
         </div>
-        <Mosaico className="hidden sm:grid" />
       </div>
-    </header>
-  );
-}
 
-function Mosaico({ className = "" }: { className?: string }) {
-  return (
-    <div aria-hidden className={`grid h-16 w-40 grid-cols-10 grid-rows-5 ${className}`}>
-      {MOSAICO.flatMap((fila, i) => fila.split("").map((c, j) => <span key={`${i}-${j}`} className={COLOR_MOSAICO[c]} />))}
-    </div>
-  );
-}
+      <section aria-labelledby="titulo-cliente" className="space-y-4">
+        <h2 id="titulo-cliente" className="text-base font-semibold">
+          Cliente y vehículo
+        </h2>
+        <Campo etiqueta="Nombre y apellido">
+          <input
+            className={estiloInput}
+            value={datos.cliente}
+            onChange={(e) => actualizar({ cliente: e.target.value })}
+            placeholder="Ej.: María Gómez"
+            autoComplete="off"
+            enterKeyHint="next"
+          />
+        </Campo>
+        <div className="grid grid-cols-[minmax(0,1fr)_96px] gap-3 sm:grid-cols-[minmax(0,1fr)_120px]">
+          <Campo etiqueta="Vehículo">
+            <input
+              className={estiloInput}
+              value={datos.vehiculo}
+              onChange={(e) => actualizar({ vehiculo: e.target.value })}
+              placeholder="Ej.: Toyota Hilux 2.8 SRX 4x4"
+              autoComplete="off"
+              enterKeyHint="next"
+            />
+          </Campo>
+          <Campo etiqueta="Año">
+            <input
+              className={`${estiloInput} tabular-nums`}
+              value={datos.anio}
+              onChange={(e) => actualizar({ anio: e.target.value.replace(/\D/g, "").slice(0, 4) })}
+              placeholder="2022"
+              inputMode="numeric"
+              autoComplete="off"
+            />
+          </Campo>
+        </div>
+      </section>
 
-function Campo({ etiqueta, children }: { etiqueta: string; children: ReactNode }) {
-  return (
-    <label className="flex min-w-0 flex-col gap-1.5">
-      <span className="text-[13px] font-medium text-suave">{etiqueta}</span>
-      {children}
-    </label>
+      <section aria-labelledby="titulo-planes" className="space-y-4">
+        <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
+          <div>
+            <h2 id="titulo-planes" className="text-base font-semibold">
+              Planes de La Segunda
+            </h2>
+            <p className="mt-1 text-[13px] text-suave">De más a menos cobertura. Tocá un plan para sumarlo.</p>
+          </div>
+          <label className="flex items-center gap-2 text-[13px] text-suave">
+            Precios
+            <select
+              value={datos.periodo}
+              onChange={(e) => actualizar({ periodo: e.target.value as Periodo })}
+              className="h-9 rounded-full border border-linea bg-white pr-8 pl-3 text-[13px] font-medium text-tinta hover:border-[#dccdd2] focus:border-rojo focus:ring-[3px] focus:ring-rojo/15 focus-visible:outline-none"
+            >
+              {PERIODOS.map((p) => (
+                <option key={p.valor} value={p.valor}>
+                  {p.texto}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        {datos.opciones.length >= MAX_OPCIONES && (
+          <p className="rounded-lg bg-rosa px-3.5 py-2.5 text-[13px] text-rojo-oscuro">
+            Ya tenés {MAX_OPCIONES} opciones. Quitá una para sumar otro plan.
+          </p>
+        )}
+
+        <ol className="divide-y divide-linea overflow-hidden rounded-xl border border-linea">
+          {PLANES.map((plan) => (
+            <FilaPlan
+              key={plan.codigo}
+              plan={plan}
+              opciones={datos.opciones}
+              periodo={datos.periodo}
+              enfocar={enfocar}
+              alEnfocar={() => setEnfocar(null)}
+              onAgregar={() => agregar(plan)}
+              onCambiar={cambiarOpcion}
+              onQuitar={quitar}
+            />
+          ))}
+        </ol>
+      </section>
+    </Pantalla>
   );
 }
 
@@ -707,58 +478,6 @@ function EditorOpcion({ opcion, numero, periodo, enfocar, alEnfocar, onCambiar, 
           </div>
         </fieldset>
       )}
-    </div>
-  );
-}
-
-function BotonPrimario({
-  children,
-  cargando,
-  ...props
-}: { children: ReactNode; cargando: boolean } & ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="button"
-      {...props}
-      className="inline-flex h-11 items-center gap-2 rounded-lg bg-rojo px-4 text-[15px] font-semibold whitespace-nowrap text-white shadow-[0_8px_18px_-8px_rgba(226,0,57,0.6)] transition-[background-color,box-shadow,transform] duration-200 hover:bg-rojo-oscuro active:translate-y-px disabled:cursor-not-allowed disabled:bg-[#ece3e6] disabled:text-[#7d7175] disabled:shadow-none sm:px-5"
-    >
-      {cargando ? <LoaderCircle size={16} className="animate-spin" aria-hidden /> : null}
-      {cargando ? "Generando…" : children}
-    </button>
-  );
-}
-
-function BotonSecundario({
-  children,
-  cargando,
-  ...props
-}: { children: ReactNode; cargando: boolean } & ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="button"
-      {...props}
-      className="inline-flex h-11 items-center gap-2 rounded-lg border border-linea bg-white px-3.5 text-[15px] font-medium whitespace-nowrap text-tinta transition-colors duration-200 hover:border-[#dccdd2] hover:bg-fondo disabled:cursor-not-allowed disabled:text-[#7d7175] disabled:hover:bg-white sm:px-4"
-    >
-      {cargando ? <LoaderCircle size={16} className="animate-spin" aria-hidden /> : null}
-      {cargando ? "Generando…" : children}
-    </button>
-  );
-}
-
-function VistaVacia() {
-  return (
-    <div className="grid h-full place-items-center p-10 text-center">
-      <div className="max-w-[34ch]">
-        <div aria-hidden className="mx-auto grid w-24 grid-cols-5 grid-rows-3">
-          {["...cv", ".cvov", "cvocv"].flatMap((fila, i) =>
-            fila.split("").map((c, j) => <span key={`${i}-${j}`} className={`aspect-square ${c === "." ? "" : COLOR_MOSAICO[c]}`} />),
-          )}
-        </div>
-        <p className="mt-6 text-base font-semibold">Todavía no elegiste planes</p>
-        <p className="mt-1.5 text-[14px] leading-relaxed text-suave">
-          Tocá un plan de la lista y la cotización aparece acá, tal cual le va a llegar al cliente.
-        </p>
-      </div>
     </div>
   );
 }

@@ -93,13 +93,17 @@ export function fechaLarga(fecha: Date): string {
   return fecha.toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" });
 }
 
-export function nombreArchivo(c: Cotizacion): string {
-  const cliente = c.cliente
+/** "María Gómez" → "Maria-Gomez", para usar en nombres de archivo. */
+export function paraArchivo(texto: string): string {
+  return texto
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-zA-Z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
-  return `Cotizacion-La-Segunda-${cliente || "cliente"}-${c.numero}.pdf`;
+}
+
+export function nombreArchivo(c: Cotizacion): string {
+  return `Cotizacion-La-Segunda-${paraArchivo(c.cliente) || "cliente"}-${c.numero}.pdf`;
 }
 
 /** Lo que falta para poder entregar el PDF, en palabras del productor. */

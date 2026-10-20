@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   // Sitio 100% estático: `next build` genera la carpeta out/ lista para GitHub Pages.
   output: "export",
   basePath,
+  // Cada página sale como carpeta/index.html (retiro/index.html), que GitHub Pages sirve sin ambigüedad.
+  trailingSlash: true,
   images: { unoptimized: true },
   // Sin cacheComponents: activa PPR, que no funciona con output "export".
   turbopack: {

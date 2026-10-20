@@ -9,7 +9,7 @@ const sora = Sora({
 
 export const metadata: Metadata = {
   title: "Cotizador · La Segunda Agencia Winifreda",
-  description: "Cotizaciones de seguro de auto en PDF para los clientes de la agencia La Segunda en Winifreda.",
+  description: "Cotizaciones de seguro de auto y proyecciones de retiro en PDF para los clientes de la agencia La Segunda en Winifreda.",
   robots: { index: false, follow: false },
 };
 

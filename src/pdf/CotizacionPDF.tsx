@@ -1,9 +1,8 @@
-import { Circle, Document, Font, Image, Page, Path, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
+import { Circle, Document, Page, Path, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
 import type { ComponentProps } from "react";
 import { AGENCIA } from "@/config/agencia";
 import {
   type Cotizacion,
-  fechaLarga,
   precioParaMostrar,
   franquiciaParaMostrar,
   textoPeriodo,
@@ -19,90 +18,9 @@ import {
   celdaDe,
   planPorCodigo,
 } from "@/lib/planes";
-
-const ROJO = "#e20039";
-const ROJO_OSCURO = "#b91f38";
-const ROJO_VIVO = "#f42c4b";
-const ROJO_CLARO = "#ff4c60";
-const TINTA = "#231a1d";
-const SUAVE = "#6b5f63";
-const LINEA = "#ece3e6";
-const ROSA = "#fdf0f3";
-const SOBRE_ROJO = "#ffdbe3";
-
-let fuentesListas = false;
-
-function registrarFuentes(base: string) {
-  if (fuentesListas) return;
-  Font.register({
-    family: "Sora",
-    fonts: [300, 400, 500, 600, 700].map((peso) => ({
-      src: `${base}/fonts/Sora-${peso}.woff`,
-      fontWeight: peso,
-    })),
-  });
-  // Sin guiones de corte: el castellano no usa la división en sílabas del inglés.
-  Font.registerHyphenationCallback((palabra) => [palabra]);
-  fuentesListas = true;
-}
-
-const MARGEN = 36;
-const ALTO_FRANJA = 78;
-const CELDA_MOSAICO = ALTO_FRANJA / 5;
-
-// Mosaico rojo de la guía de marca, dibujado como una escalera que sube hacia la derecha.
-// o = rojo oscuro, v = rojo vibrante, c = rojo claro, . = queda el rojo de la franja.
-const MOSAICO = [
-  "........cv",
-  "......cvov",
-  "....cv.vco",
-  "..cvoc.ovo",
-  "cvovcovcov",
-];
-const COLOR_MOSAICO: Record<string, string> = { o: ROJO_OSCURO, v: ROJO_VIVO, c: ROJO_CLARO };
+import { Atencion, Cabecera, LINEA, Pie, ROJO, ROJO_OSCURO, ROSA, SOBRE_ROJO, SUAVE, TINTA, estilosBase, registrarFuentes } from "./comun";
 
 const s = StyleSheet.create({
-  pagina: {
-    fontFamily: "Sora",
-    fontSize: 9,
-    color: TINTA,
-    paddingTop: MARGEN,
-    paddingBottom: 42,
-    paddingHorizontal: MARGEN,
-  },
-  franja: {
-    marginTop: -MARGEN,
-    marginHorizontal: -MARGEN,
-    height: ALTO_FRANJA,
-    backgroundColor: ROJO,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  franjaMarca: { paddingLeft: MARGEN, paddingTop: 17 },
-  logo: { width: 124, height: (124 * 435) / 1891 },
-  credito: {
-    marginTop: 10,
-    borderLeftWidth: 2,
-    borderLeftColor: "#ffffff",
-    paddingLeft: 7,
-    color: "#ffffff",
-    fontWeight: 700,
-    fontSize: 8,
-    letterSpacing: 1.7,
-    textTransform: "uppercase",
-  },
-  mosaico: { flexDirection: "column" },
-  filaMosaico: { flexDirection: "row" },
-  celdaMosaico: { width: CELDA_MOSAICO, height: CELDA_MOSAICO },
-
-  intro: { marginTop: 18, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" },
-  titulo: { fontSize: 19, fontWeight: 700, letterSpacing: -0.4, lineHeight: 1.2 },
-  subtitulo: { marginTop: 4, fontSize: 10, color: SUAVE, lineHeight: 1.35 },
-  meta: { fontSize: 8, color: SUAVE, textAlign: "right", lineHeight: 1.5 },
-
-  seccion: { marginTop: 13 },
-  h2: { fontSize: 11.5, fontWeight: 700, letterSpacing: -0.1, marginBottom: 5 },
-
   opciones: { flexDirection: "row", gap: 10 },
   tarjeta: {
     flex: 1,
@@ -115,19 +33,6 @@ const s = StyleSheet.create({
   },
   tarjetaRecomendada: { backgroundColor: ROJO, borderColor: ROJO },
   tarjetaArriba: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  chip: {
-    backgroundColor: ROJO,
-    color: "#ffffff",
-    fontSize: 6.5,
-    fontWeight: 700,
-    letterSpacing: 0.8,
-    paddingHorizontal: 5,
-    paddingTop: 2.5,
-    paddingBottom: 2,
-    borderRadius: 3,
-  },
-  chipSobreRojo: { backgroundColor: "#ffffff", color: ROJO },
-  marcaOpcion: { fontSize: 6.5, fontWeight: 700, letterSpacing: 0.8, color: SUAVE },
   nombrePlan: { marginTop: 7, fontSize: 12, fontWeight: 700, letterSpacing: -0.2 },
   tipoPlan: { marginTop: 1.5, fontSize: 8, color: SUAVE },
   precio: { marginTop: 9, fontSize: 18, fontWeight: 700, letterSpacing: -0.4 },
@@ -162,23 +67,6 @@ const s = StyleSheet.create({
   limiteMonto: { fontSize: 8, fontWeight: 600, color: TINTA },
   introGlosario: { fontSize: 9, color: SUAVE, lineHeight: 1.45, marginBottom: 10, maxWidth: 420 },
 
-  aviso: { marginTop: 12, fontSize: 7.2, color: SUAVE, lineHeight: 1.45 },
-
-  pie: {
-    position: "absolute",
-    bottom: 16,
-    left: MARGEN,
-    right: MARGEN,
-    flexDirection: "row",
-    alignItems: "center",
-    borderTopWidth: 0.5,
-    borderTopColor: LINEA,
-    paddingTop: 7,
-  },
-  pieIsotipo: { width: 14, height: 14, marginRight: 8 },
-  pieTexto: { flex: 1, fontSize: 7, color: SUAVE, lineHeight: 1.4 },
-  pieAgencia: { fontWeight: 700, color: TINTA },
-  piePagina: { fontSize: 7, color: SUAVE, marginLeft: 12 },
 });
 
 function Tilde() {
@@ -197,30 +85,6 @@ function Tilde() {
   );
 }
 
-function Atencion({ color }: { color: string }) {
-  return (
-    <Svg width={8} height={8} viewBox="0 0 10 10">
-      <Circle cx={5} cy={5} r={4.4} stroke={color} strokeWidth={1.1} fill="none" />
-      <Path d="M5 2.7 L5 5.6" stroke={color} strokeWidth={1.2} strokeLinecap="round" />
-      <Circle cx={5} cy={7.3} r={0.7} fill={color} />
-    </Svg>
-  );
-}
-
-function Mosaico() {
-  return (
-    <View style={s.mosaico}>
-      {MOSAICO.map((fila, i) => (
-        <View key={i} style={s.filaMosaico}>
-          {fila.split("").map((c, j) => (
-            <View key={j} style={[s.celdaMosaico, { backgroundColor: COLOR_MOSAICO[c] ?? ROJO }]} />
-          ))}
-        </View>
-      ))}
-    </View>
-  );
-}
-
 type OpcionArmada = Cotizacion["opciones"][number] & { datos: Plan; numero: number };
 
 function Tarjeta({ opcion, periodo }: { opcion: OpcionArmada; periodo: string }) {
@@ -231,8 +95,8 @@ function Tarjeta({ opcion, periodo }: { opcion: OpcionArmada; periodo: string })
   return (
     <View style={[s.tarjeta, rojo ? s.tarjetaRecomendada : {}]} wrap={false}>
       <View style={s.tarjetaArriba}>
-        <Text style={[s.chip, rojo ? s.chipSobreRojo : {}]}>PLAN {opcion.datos.codigo}</Text>
-        <Text style={[s.marcaOpcion, rojo ? { color: "#ffffff" } : {}]}>
+        <Text style={[estilosBase.chip, rojo ? estilosBase.chipSobreRojo : {}]}>PLAN {opcion.datos.codigo}</Text>
+        <Text style={[estilosBase.marcaOpcion, rojo ? { color: "#ffffff" } : {}]}>
           {rojo ? "RECOMENDADA" : `OPCIÓN ${opcion.numero}`}
         </Text>
       </View>
@@ -395,31 +259,6 @@ function Glosario({ opciones }: { opciones: OpcionArmada[] }) {
   );
 }
 
-function Pie({ base }: { base: string }) {
-  const contacto = [
-    AGENCIA.productor && `Productor: ${AGENCIA.productor}`,
-    AGENCIA.matricula && `Mat. SSN ${AGENCIA.matricula}`,
-    AGENCIA.telefono && `Tel. ${AGENCIA.telefono}`,
-    AGENCIA.whatsapp && `WhatsApp ${AGENCIA.whatsapp}`,
-    AGENCIA.email,
-    AGENCIA.direccion || AGENCIA.localidad,
-  ].filter(Boolean);
-  return (
-    <View style={s.pie} fixed>
-      {/* eslint-disable-next-line jsx-a11y/alt-text -- el Image de react-pdf no admite alt */}
-      <Image src={`${base}/marca/isotipo.png`} style={s.pieIsotipo} />
-      <Text style={s.pieTexto}>
-        <Text style={s.pieAgencia}>{AGENCIA.nombre} · La Segunda Seguros</Text>
-        {contacto.length ? `   ${contacto.join(" · ")}` : ""}
-      </Text>
-      <Text
-        style={s.piePagina}
-        render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
-      />
-    </View>
-  );
-}
-
 export function CotizacionPDF({ cotizacion, base }: { cotizacion: Cotizacion; base: string }) {
   registrarFuentes(base);
   const opciones: OpcionArmada[] = cotizacion.opciones.map((o, i) => ({
@@ -447,30 +286,18 @@ export function CotizacionPDF({ cotizacion, base }: { cotizacion: Cotizacion; ba
       subject={`Seguro de auto · ${vehiculo}`}
       language="es-AR"
     >
-      <Page size="A4" style={s.pagina}>
-        <View style={s.franja}>
-          <View style={s.franjaMarca}>
-            {/* eslint-disable-next-line jsx-a11y/alt-text -- el Image de react-pdf no admite alt */}
-            <Image src={`${base}/marca/logo-blanco.png`} style={s.logo} />
-            <Text style={s.credito}>{AGENCIA.nombre}</Text>
-          </View>
-          <Mosaico />
-        </View>
-
-        <View style={s.intro}>
-          <View style={{ flex: 1, paddingRight: 16 }}>
-            <Text style={s.titulo}>Cotización para {cliente}</Text>
-            <Text style={s.subtitulo}>Seguro de auto · {vehiculo}</Text>
-          </View>
-          <View>
-            <Text style={s.meta}>{fechaLarga(cotizacion.fecha)}</Text>
-            <Text style={s.meta}>Nº {cotizacion.numero}</Text>
-          </View>
-        </View>
+      <Page size="A4" style={estilosBase.pagina}>
+        <Cabecera
+          base={base}
+          titulo={`Cotización para ${cliente}`}
+          subtitulo={`Seguro de auto · ${vehiculo}`}
+          fecha={cotizacion.fecha}
+          numero={cotizacion.numero}
+        />
 
         {opciones.length > 0 && (
           <>
-            <View style={s.seccion}>
+            <View style={estilosBase.seccion}>
               <View style={s.opciones}>
                 {opciones.map((o) => (
                   <Tarjeta key={o.id} opcion={o} periodo={periodo} />
@@ -478,18 +305,18 @@ export function CotizacionPDF({ cotizacion, base }: { cotizacion: Cotizacion; ba
               </View>
             </View>
 
-            <View style={s.seccion}>
-              <Text style={s.h2}>{opciones.length > 1 ? "Qué cubre cada opción" : "Qué cubre"}</Text>
+            <View style={estilosBase.seccion}>
+              <Text style={estilosBase.h2}>{opciones.length > 1 ? "Qué cubre cada opción" : "Qué cubre"}</Text>
               <Tabla opciones={opciones} />
             </View>
 
             <View break>
-              <Text style={s.h2}>Qué significa cada cobertura</Text>
+              <Text style={estilosBase.h2}>Qué significa cada cobertura</Text>
               <Text style={s.introGlosario}>
                 Las coberturas de tu cotización, explicadas con los términos de La Segunda.
               </Text>
               <Glosario opciones={opciones} />
-              <Text style={s.aviso}>
+              <Text style={estilosBase.aviso}>
                 Cotización informativa preparada por {AGENCIA.nombre}. Los precios y las coberturas se
                 confirman al emitir la póliza y se rigen por sus condiciones generales y particulares.
                 Coberturas y límites de Responsabilidad Civil según la información pública de La Segunda
