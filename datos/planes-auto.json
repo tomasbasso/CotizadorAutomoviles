@@ -1,0 +1,147 @@
+{
+  "fuente": "https://www.lasegunda.com.ar/seguros-para-autos (web pública)",
+  "relevado": "2026-10-20",
+  "coberturas": {
+    "rc": {
+      "nombre": "Responsabilidad Civil",
+      "detalle": "Daños ocasionados por el asegurado y/o conductor del vehículo asegurado a terceras personas, transportadas o no, y/o los daños materiales producidos a bienes de terceras personas.",
+      "limites": {
+        "Autos, jeeps y pick ups de uso particular y comercial": "$250.000.000",
+        "Camiones y maquinaria": "$500.000.000",
+        "Vehículos especiales": "$676.000.000"
+      }
+    },
+    "incendio_total": {
+      "nombre": "Incendio total",
+      "detalle": "Quedan cubiertos los daños totales que pueda sufrir el vehículo como consecuencia de incendio, hasta la suma asegurada establecida en la póliza."
+    },
+    "incendio_parcial": {
+      "nombre": "Incendio parcial",
+      "detalle": "Quedan cubiertos los daños parciales que pueda sufrir el vehículo como consecuencia de incendio, hasta la suma asegurada establecida en la póliza."
+    },
+    "accidente_total": {
+      "nombre": "Accidente total",
+      "detalle": "Daños totales que sufra el vehículo como consecuencia de un accidente."
+    },
+    "accidente_parcial": {
+      "nombre": "Accidente parcial",
+      "detalle": "Daños parciales que sufra el vehículo como consecuencia de un accidente. 1.5%, 2.5%, 3.5% y 5% de la suma asegurada con límites.",
+      "ejemplo": "Ejemplo: si chocás un perro y se rompe el paragolpes, ese arreglo solo lo cubre el Plan Privilegio (Todo Riesgo), descontando la franquicia."
+    },
+    "robo_total": {
+      "nombre": "Robo o hurto total",
+      "detalle": "Indemnización al asegurado en caso de robo y/o hurto total de la unidad asegurada, hasta la suma asegurada establecida en la póliza."
+    },
+    "robo_parcial": {
+      "nombre": "Robo o hurto parcial",
+      "detalle": "Indemnización al asegurado en caso de robo parcial de la unidad asegurada, hasta la suma asegurada establecida en la póliza."
+    },
+    "cristales": {
+      "nombre": "Cristales laterales y cerraduras",
+      "detalle": "Cobertura de cristales laterales y cerraduras sin límite de eventos ni suma asegurada para los planes Privilegio y Selecto. Para los planes Compacto, 25, 36 y 29 hasta el 1% de la suma asegurada."
+    },
+    "parabrisas": {
+      "nombre": "Parabrisas y luneta",
+      "detalle": "Protege parabrisas y lunetas, sin límite de eventos ni suma asegurada."
+    },
+    "cubiertas": {
+      "nombre": "Reposición de cubiertas",
+      "detalle": "Reposición de cubiertas por robo sin depreciación por desgaste."
+    },
+    "reposicion_nuevo": {
+      "nombre": "Reposición a nuevo",
+      "detalle": "En los primeros 12 meses, reposición a nuevo por robo, accidente o incendio total del vehículo asegurado desde 0 km, siempre y cuando esté asegurado en forma ininterrumpida con LA SEGUNDA. Solo para automóviles."
+    },
+    "granizo": {
+      "nombre": "Daños por granizo",
+      "detalle": "La cobertura de granizo es sin franquicia y se cubre hasta la suma asegurada del vehículo."
+    },
+    "granizo_limite": {
+      "nombre": "Daños por granizo con límite",
+      "detalle": "La cobertura de granizo es sin franquicia y se cubre hasta el 10% de la suma asegurada del vehículo."
+    },
+    "danos_amparo_robo": {
+      "nombre": "Daños parciales al amparo del robo o hurto total",
+      "detalle": "Hasta el 3% de la suma asegurada."
+    },
+    "tambor": {
+      "nombre": "Tambor de arranque",
+      "detalle": "Reconocimiento de daños a tambor de arranque en caso de robo o intento de robo, hasta el 1% de la suma asegurada."
+    },
+    "techo": {
+      "nombre": "Techo corredizo",
+      "detalle": "Reintegro por reparación o reemplazo de techo corredizo y/o cristal de techo fijo, solo para originales de fábrica, sin límite de eventos, hasta la suma asegurada."
+    },
+    "airbag": {
+      "nombre": "Reposición y reinstalación de airbag",
+      "detalle": "Reposición y reinstalación de los airbags del vehículo.",
+      "nota_interna": "La web pública solo lo menciona en la tarjeta resumen del Plan Selecto L2, sin detalle de límites."
+    },
+    "conductor": {
+      "nombre": "Seguro del conductor",
+      "detalle": "Cobertura por muerte o incapacidad total del conductor producto de un accidente de tránsito."
+    },
+    "asistencia": {
+      "nombre": "Asistencia al vehículo y a las personas",
+      "detalle": "Se solicita por la App \"La Segunda Seguros\", por teléfono (nacional e internacional con cobro revertido) al 0800 888 0001 o por WhatsApp al 3416 491 199."
+    },
+    "bonificacion": {
+      "nombre": "Bonificación por no siniestralidad",
+      "detalle": "Bonificación por no tener siniestros a partir del primer año de continuidad de la póliza."
+    },
+    "cleas": {
+      "nombre": "CLEAS",
+      "detalle": "Sistema de compensación de siniestros entre compañías de seguros. Si tenés un choque y no sos responsable, tu aseguradora se encarga de todo."
+    }
+  },
+  "planes": [
+    {
+      "codigo": "30",
+      "nombre": "Plan Privilegio",
+      "tipo": "Todo Riesgo",
+      "coberturas": ["rc", "incendio_total", "incendio_parcial", "accidente_total", "accidente_parcial", "robo_total", "robo_parcial", "cristales", "parabrisas", "cubiertas", "reposicion_nuevo", "granizo", "danos_amparo_robo", "tambor", "techo", "conductor", "asistencia", "bonificacion", "cleas"]
+    },
+    {
+      "codigo": "L200",
+      "nombre": "Plan Selecto L2",
+      "tipo": "Tercero Completo Full",
+      "coberturas": ["rc", "incendio_total", "incendio_parcial", "accidente_total", "robo_total", "robo_parcial", "cristales", "parabrisas", "cubiertas", "reposicion_nuevo", "granizo", "danos_amparo_robo", "tambor", "airbag", "techo", "conductor", "asistencia", "bonificacion", "cleas"]
+    },
+    {
+      "codigo": "29",
+      "nombre": "Tercero Completo",
+      "tipo": "Tercero Completo",
+      "coberturas": ["rc", "incendio_total", "incendio_parcial", "accidente_total", "robo_total", "robo_parcial", "cristales", "cubiertas", "granizo_limite", "conductor", "asistencia", "bonificacion", "cleas"]
+    },
+    {
+      "codigo": "36",
+      "nombre": "Incendio y Robo Full",
+      "tipo": "Incendio y Robo Full",
+      "coberturas": ["rc", "incendio_total", "incendio_parcial", "robo_total", "robo_parcial", "cristales", "cubiertas", "conductor", "asistencia", "bonificacion", "cleas"]
+    },
+    {
+      "codigo": "25",
+      "nombre": "Incendio, Robo y Accidente Total",
+      "tipo": "Incendio, Robo y Accidente Total",
+      "coberturas": ["rc", "incendio_total", "accidente_total", "robo_total", "cristales", "conductor", "asistencia", "bonificacion", "cleas"]
+    },
+    {
+      "codigo": "35",
+      "nombre": "Plan Compacto L2",
+      "tipo": "Incendio Full y Robo Total",
+      "coberturas": ["rc", "incendio_total", "incendio_parcial", "robo_total", "cristales", "conductor", "asistencia", "bonificacion", "cleas"]
+    },
+    {
+      "codigo": "34",
+      "nombre": "Plan Ignis L2",
+      "tipo": "Incendio Full",
+      "coberturas": ["rc", "incendio_total", "incendio_parcial", "conductor", "asistencia", "bonificacion", "cleas"]
+    },
+    {
+      "codigo": "20",
+      "nombre": "Plan Arranque L2",
+      "tipo": "Responsabilidad Civil",
+      "coberturas": ["rc", "bonificacion", "cleas"]
+    }
+  ]
+}

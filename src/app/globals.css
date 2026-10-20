@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rojo: #e20039;
+  --color-rojo-oscuro: #b91f38;
+  --color-rojo-vivo: #f42c4b;
+  --color-rojo-claro: #ff4c60;
+  --color-rosa: #fdf0f3;
+  --color-tinta: #231a1d;
+  --color-suave: #6b5f63;
+  --color-linea: #ece3e6;
+  --color-fondo: #f6f2f3;
+
+  --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-salida: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-despliegue: despliegue 360ms var(--ease-salida) both;
+
+  @keyframes despliegue {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      clip-path: inset(0 0 0 0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background: var(--color-fondo);
+    color: var(--color-tinta);
+  }
+
+  ::selection {
+    background: var(--color-rojo);
+    color: #ffffff;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--color-rojo);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-rojo);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #d6c9ce transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
