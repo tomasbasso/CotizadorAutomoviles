@@ -1,7 +1,7 @@
 # Cotizador La Segunda (agencia Winifreda)
 Tipo: propio (agencia La Segunda en Winifreda)
 Tamaño: chico (validación corta y construcción directa; /gsd-quick pide un roadmap GSD)
-Etapa actual: 6. Publicar (código en GitHub; falta activar GitHub Pages y cargar los datos de la agencia)
+Etapa actual: 6. Publicar (publicado en https://tomasbasso.github.io/CotizadorAutomoviles/; falta cargar los datos de la agencia)
 
 ## Decisiones
 - 2026-10-20 GO: herramienta interna para armar cotizaciones de auto en PDF y mandarlas al cliente. Valor claro, sin backend.
@@ -21,6 +21,6 @@ Etapa actual: 6. Publicar (código en GitHub; falta activar GitHub Pages y carga
 - [x] 3. Identidad y diseño: se heredó la marca; dirección en .impeccable/surfaces y DESIGN.md.
 - [x] 4. Construir: pantalla de carga con vista previa en vivo y PDF de 2 hojas.
 - [x] 5. Verificar: tsc, lint y build OK; probado en navegador en escritorio y celular; detector de impeccable sin hallazgos. No guarda datos, así que no requiere revisión de seguridad.
-- [ ] 6. Publicar: subido a GitHub. Falta activar Pages (Settings → Pages → Source: GitHub Actions) y completar src/config/agencia.ts.
+- [x] 6. Publicar: en GitHub Pages desde el 2026-10-20 (https://tomasbasso.github.io/CotizadorAutomoviles/). Pendiente: completar src/config/agencia.ts.
 - [ ] 7. Lanzar y vender: no aplica, es de uso interno.
 - [ ] 8. Mantener: revisar cada tanto los planes y límites en la web de La Segunda.
