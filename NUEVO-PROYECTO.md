@@ -1,7 +1,7 @@
 # Cotizador La Segunda (agencia Winifreda)
 Tipo: propio (agencia La Segunda en Winifreda)
 Tamaño: chico (validación corta y construcción directa; /gsd-quick pide un roadmap GSD)
-Etapa actual: 6. Publicar (falta el OK para subir a Vercel y los datos de la agencia)
+Etapa actual: 6. Publicar (código en GitHub; falta activar GitHub Pages y cargar los datos de la agencia)
 
 ## Decisiones
 - 2026-10-20 GO: herramienta interna para armar cotizaciones de auto en PDF y mandarlas al cliente. Valor claro, sin backend.
@@ -9,7 +9,9 @@ Etapa actual: 6. Publicar (falta el OK para subir a Vercel y los datos de la age
 - 2026-10-20 Solo autos y pick-ups (los 8 planes de la web pública). Motos y camiones quedan afuera por ahora.
 - 2026-10-20 Datos a mano: cliente, vehículo, año, plan(es), precio y franquicia (solo Plan 30 / Todo Riesgo). Se agregan el período del precio (mes por defecto) y la marca de "Recomendada".
 - 2026-10-20 Sin historial ni login. Se puede sumar después con Supabase.
-- 2026-10-20 Stack: Next.js 16 + @react-pdf/renderer, con el PDF generado en el navegador. Deploy previsto en Vercel.
+- 2026-10-20 Stack: Next.js 16 + @react-pdf/renderer, con el PDF generado en el navegador.
+- 2026-10-20 Publicación en GitHub Pages (repo tomasbasso/CotizadorAutomoviles): export estático, basePath por NEXT_PUBLIC_BASE_PATH y workflow .github/workflows/pages.yml. Se sacó cacheComponents porque PPR no funciona con output "export".
+- 2026-10-20 Franquicia del Plan 30: porcentaje y monto en pesos.
 - 2026-10-20 Diseño: guía de marca La Segunda (rojo #e20039, Sora, mosaico rojo, crédito AGENCIA WINIFREDA). Detalle en DESIGN.md.
 - 2026-10-20 Planes y coberturas relevados de lasegunda.com.ar → datos/planes-auto.json. Si cambian planes o límites de RC, hay que actualizar ese archivo.
 
@@ -19,6 +21,6 @@ Etapa actual: 6. Publicar (falta el OK para subir a Vercel y los datos de la age
 - [x] 3. Identidad y diseño: se heredó la marca; dirección en .impeccable/surfaces y DESIGN.md.
 - [x] 4. Construir: pantalla de carga con vista previa en vivo y PDF de 2 hojas.
 - [x] 5. Verificar: tsc, lint y build OK; probado en navegador en escritorio y celular; detector de impeccable sin hallazgos. No guarda datos, así que no requiere revisión de seguridad.
-- [ ] 6. Publicar: completar src/config/agencia.ts y subir a Vercel.
+- [ ] 6. Publicar: subido a GitHub. Falta activar Pages (Settings → Pages → Source: GitHub Actions) y completar src/config/agencia.ts.
 - [ ] 7. Lanzar y vender: no aplica, es de uso interno.
 - [ ] 8. Mantener: revisar cada tanto los planes y límites en la web de La Segunda.
