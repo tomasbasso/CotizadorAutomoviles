@@ -49,6 +49,10 @@ Solo Sora (300 a 700), en la pantalla y en el PDF. Títulos en 700 con tracking 
 5. Hoja 2: glosario en dos columnas parejas con los textos oficiales de La Segunda (Accidente parcial suma el ejemplo del perro), más la aclaración legal.
 6. Pie fijo con el isotipo, la agencia, los datos de contacto y la numeración de página.
 
+## Simulador para clientes
+
+La misma pantalla de retiro en modo cliente. Título en pregunta ("¿Cuánto podés juntar para tu retiro?"), textos en segunda persona, sin selector Auto / Retiro ni chip Recomendada. Cierra con una caja `rosa` en rojo oscuro: aclara que son estimaciones e invita a consultar con la agencia. En la pantalla del productor, una caja `fondo` con "Copiar link" pasa la dirección del simulador.
+
 ## PDF de retiro (A4, dos hojas)
 
 1. La misma franja roja y el mismo pie.

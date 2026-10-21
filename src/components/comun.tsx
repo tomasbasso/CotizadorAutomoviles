@@ -332,13 +332,14 @@ type PanelVistaPreviaProps = {
   /** Estado vacío a mostrar mientras no haya nada para armar; null cuando ya hay PDF. */
   vacio: ReactNode | null;
   titulo: string;
+  encabezado?: string;
 };
 
-export function PanelVistaPrevia({ vista, vacio, titulo }: PanelVistaPreviaProps) {
+export function PanelVistaPrevia({ vista, vacio, titulo, encabezado = "Así lo va a ver tu cliente" }: PanelVistaPreviaProps) {
   return (
     <aside aria-label="Vista previa del PDF" className="hidden min-h-0 flex-col bg-[#ece5e8] p-6 lg:flex xl:p-8">
       <div className="flex h-8 items-center justify-between pb-3">
-        <h2 className="text-sm font-semibold">Así lo va a ver tu cliente</h2>
+        <h2 className="text-sm font-semibold">{encabezado}</h2>
         {vista.cargando && (
           <span className="inline-flex items-center gap-1.5 text-[13px] text-suave">
             <LoaderCircle size={14} className="animate-spin" aria-hidden />

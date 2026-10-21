@@ -218,13 +218,21 @@ export function estadoEscenario(
   return { tipo: "ok", aporte, edadRetiro, resultado, totalAportado: aporte * resultado.mesesDeAporte };
 }
 
-/** Lo que falta para poder entregar el PDF, en palabras del productor. */
-export function faltantesRetiro(c: Omit<CotizacionRetiro, "numero" | "fecha">, hoy = new Date()): string[] {
+/**
+ * Lo que falta para poder entregar el PDF. Para el productor el nombre es obligatorio;
+ * en el simulador para clientes es opcional y los textos le hablan al cliente ("tu fecha").
+ */
+export function faltantesRetiro(
+  c: Omit<CotizacionRetiro, "numero" | "fecha">,
+  hoy = new Date(),
+  { paraCliente = false } = {},
+): string[] {
   const lista: string[] = [];
-  if (!c.cliente.trim()) lista.push("el nombre del cliente");
+  if (!paraCliente && !c.cliente.trim()) lista.push("el nombre del cliente");
   const nacimiento = estadoNacimiento(c.nacimiento, hoy);
-  if (nacimiento.tipo === "vacia") lista.push("la fecha de nacimiento");
-  else if (nacimiento.tipo !== "ok") lista.push("corregir la fecha de nacimiento");
+  const fecha = paraCliente ? "tu fecha de nacimiento" : "la fecha de nacimiento";
+  if (nacimiento.tipo === "vacia") lista.push(fecha);
+  else if (nacimiento.tipo !== "ok") lista.push(`corregir ${fecha}`);
   if (!c.sexo) lista.push("el sexo");
   if (c.escenarios.length === 0) lista.push("al menos una opción");
   c.escenarios.forEach((e, i) => {
@@ -301,5 +309,6 @@ export function textoQuitas(): string {
 }
 
 export function nombreArchivoRetiro(c: CotizacionRetiro): string {
-  return `Retiro-La-Segunda-${paraArchivo(c.cliente) || "cliente"}-${c.numero}.pdf`;
+  const nombre = paraArchivo(c.cliente);
+  return `Retiro-La-Segunda-${nombre ? `${nombre}-` : ""}${c.numero}.pdf`;
 }

@@ -152,7 +152,9 @@ export function RetiroPDF({ cotizacion, base }: { cotizacion: CotizacionRetiro; 
     const estado = estadoEscenario(cotizacion, e, hoy);
     return estado.tipo === "ok" ? [{ ...e, numero: i + 1, estado }] : [];
   });
-  const cliente = cotizacion.cliente.trim() || "tu cliente";
+  // En el simulador para clientes el nombre es opcional.
+  const cliente = cotizacion.cliente.trim();
+  const titulo = cliente ? `Proyección de retiro para ${cliente}` : "Tu proyección de retiro";
   const nacimiento = estadoNacimiento(cotizacion.nacimiento, hoy);
   const edad = nacimiento.tipo === "ok" ? `${nacimiento.edad} años` : "";
   const sexo = SEXOS.find((x) => x.valor === cotizacion.sexo)?.texto ?? "";
@@ -218,7 +220,7 @@ export function RetiroPDF({ cotizacion, base }: { cotizacion: CotizacionRetiro; 
 
   return (
     <Document
-      title={`Proyección de retiro para ${cliente}`}
+      title={titulo}
       author={`${AGENCIA.nombre} · La Segunda Seguros`}
       subject={`Seguro de Retiro · ahorro ${textoMoneda(cotizacion.moneda)}`}
       language="es-AR"
@@ -226,7 +228,7 @@ export function RetiroPDF({ cotizacion, base }: { cotizacion: CotizacionRetiro; 
       <Page size="A4" style={estilosBase.pagina}>
         <Cabecera
           base={base}
-          titulo={`Proyección de retiro para ${cliente}`}
+          titulo={titulo}
           subtitulo={`Seguro de Retiro · Ahorro ${textoMoneda(cotizacion.moneda)}${edad ? ` · ${edad}` : ""}`}
           fecha={cotizacion.fecha}
           numero={cotizacion.numero}

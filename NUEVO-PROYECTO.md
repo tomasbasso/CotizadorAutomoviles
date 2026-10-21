@@ -17,6 +17,7 @@ Etapa actual: 6. Publicar (publicado en https://tomasbasso.github.io/CotizadorAu
 - 2026-10-20 Se suma Retiro: ingeniería inversa del cotizador público (el cálculo corre en el navegador; verificado contra el sitio con coincidencia exacta). Fórmula y parámetros en src/lib/retiro.ts y datos/retiro.json. Pestaña /retiro con hasta 3 opciones de ahorro (moneda única por PDF) y PDF de una hoja.
 - 2026-10-20 Pantallas y PDF comparten encabezado, barra de acciones, vista previa, franja y pie (src/components/comun.tsx, src/pdf/comun.tsx). El PDF de autos quedó idéntico píxel por píxel.
 - 2026-10-20 Retiro sigue las condiciones de Futuro Protegido de la hoja para agencias: descuenta gastos administrativos además de la tasa SSN (los montos dan ~1 % por debajo del sitio), contratación hasta 65 años, y el PDF suma mínimo garantizado, rescates, formas de cobro, beneficios y el rendimiento real de la cartera (informe mensual). El PDF pasa a 2 hojas.
+- 2026-10-21 Simulador de retiro para clientes en /simulador-retiro/: misma pantalla con modo "cliente" (textos en segunda persona, dólares por defecto, nombre opcional, sin Auto ni Recomendada). Pensado para que los amigos del productor (27-28 años, trabajan en el campo) jueguen con el link que les llega por WhatsApp.
 - 2026-10-20 trailingSlash en next.config: cada página se exporta como carpeta/index.html para que GitHub Pages sirva /retiro/ sin ambigüedad.
 
 ## Etapas

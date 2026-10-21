@@ -1,7 +1,8 @@
 "use client";
 
-import { CircleAlert, Minus, Plus, Star, X } from "lucide-react";
+import { Check, CircleAlert, Link2, Minus, Plus, Star, X } from "lucide-react";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { AGENCIA } from "@/config/agencia";
 import { numeroCotizacion, precioParaInput } from "@/lib/cotizacion";
 import {
   type CotizacionRetiro,
@@ -28,6 +29,7 @@ import {
   textoPorcentaje,
   textoTasa,
 } from "@/lib/retiro";
+import { BASE_PATH } from "@/lib/rutas";
 import {
   BarraAcciones,
   BotonReiniciar,
@@ -46,6 +48,46 @@ import {
 
 type Datos = Omit<CotizacionRetiro, "numero" | "fecha">;
 
+/**
+ * "productor": la herramienta de la agencia (/retiro/).
+ * "cliente": el simulador para pasarle a cualquiera (/simulador-retiro/): le habla al cliente,
+ * arranca en dólares, el nombre es opcional y no tiene lo que es solo del productor.
+ */
+export type Modo = "productor" | "cliente";
+
+export const RUTA_SIMULADOR = "/simulador-retiro/";
+
+const TEXTOS = {
+  productor: {
+    titulo: "Nueva proyección de retiro",
+    intro: `Cargá al cliente y armá hasta ${MAX_ESCENARIOS} opciones de ahorro en el plan Futuro Protegido. La renta se calcula como en el cotizador online de La Segunda, descontando los gastos del plan.`,
+    persona: "Cliente",
+    nombre: "Nombre y apellido",
+    ejemploNombre: "Ej.: María Gómez",
+    tieneEdad: "Tiene",
+    rangoRetiro: "Para este cliente",
+    faltaAporte: "Poné cuánto quiere ahorrar por mes y a qué edad se retira.",
+    vacio: "Completá la fecha de nacimiento, el sexo y cuánto quiere ahorrar por mes. La proyección aparece acá, tal cual le va a llegar al cliente.",
+    encabezadoVista: "Así lo va a ver tu cliente",
+    lista: "Lista para enviar",
+    monedaInicial: "ARS" as Moneda,
+  },
+  cliente: {
+    titulo: "¿Cuánto podés juntar para tu retiro?",
+    intro: `Simulá el Seguro de Retiro de La Segunda: elegí cuánto ahorrar por mes y a qué edad retirarte, y mirá cuánto juntarías. Podés comparar hasta ${MAX_ESCENARIOS} opciones. No se guarda nada de lo que cargás.`,
+    persona: "Tus datos",
+    nombre: "Tu nombre (opcional, sale en el PDF)",
+    ejemploNombre: "Ej.: Juan",
+    tieneEdad: "Tenés",
+    rangoRetiro: "Para tu edad",
+    faltaAporte: "Poné cuánto querés ahorrar por mes y a qué edad te retirarías.",
+    vacio: "Completá tu fecha de nacimiento, el sexo y cuánto querés ahorrar por mes. Tu proyección en PDF aparece acá.",
+    encabezadoVista: "Así queda tu PDF",
+    lista: "Tu PDF está listo",
+    monedaInicial: "USD" as Moneda,
+  },
+};
+
 const nuevoEscenario = (edadRetiro: number, id: string = crypto.randomUUID()): Escenario => ({
   id,
   aporte: "",
@@ -54,8 +96,8 @@ const nuevoEscenario = (edadRetiro: number, id: string = crypto.randomUUID()): E
 });
 
 // La primera opción tiene id fijo para que el HTML pre-renderizado coincida con el del navegador.
-function datosIniciales(): Datos {
-  return { cliente: "", nacimiento: "", sexo: "", moneda: "ARS", escenarios: [nuevoEscenario(edadRetiroSugerida(null), "inicial")] };
+function datosIniciales(moneda: Moneda): Datos {
+  return { cliente: "", nacimiento: "", sexo: "", moneda, escenarios: [nuevoEscenario(edadRetiroSugerida(null), "inicial")] };
 }
 
 async function armarArchivo(datos: Datos): Promise<File> {
@@ -66,8 +108,10 @@ async function armarArchivo(datos: Datos): Promise<File> {
   return new File([blob], nombreArchivoRetiro(cotizacion), { type: "application/pdf" });
 }
 
-export function CotizadorRetiro() {
-  const [datos, setDatos] = useState<Datos>(datosIniciales);
+export function CotizadorRetiro({ modo = "productor" }: { modo?: Modo }) {
+  const textos = TEXTOS[modo];
+  const paraCliente = modo === "cliente";
+  const [datos, setDatos] = useState<Datos>(() => datosIniciales(textos.monedaInicial));
   const [enfocar, setEnfocar] = useState<string | null>(null);
   const escritorio = useMedia("(min-width: 1024px)");
   const puedeCompartir = usePuedeCompartir();
@@ -105,7 +149,7 @@ export function CotizadorRetiro() {
     return () => clearTimeout(ahora);
   }, []);
 
-  const falta = faltantesRetiro(datos, hoy);
+  const falta = faltantesRetiro(datos, hoy, { paraCliente });
   const lista = falta.length === 0;
   const hayDatos = Boolean(
     datos.cliente || datos.nacimiento || datos.sexo || datos.escenarios.some((e) => e.aporte) || datos.escenarios.length !== 1,
@@ -113,7 +157,10 @@ export function CotizadorRetiro() {
 
   const acciones = useAccionesPDF(
     () => armarArchivo(datos),
-    () => `Hola ${datos.cliente.trim().split(/\s+/)[0]}, te paso la proyección de tu seguro de retiro.`,
+    () =>
+      paraCliente
+        ? "Te comparto mi proyección del Seguro de Retiro de La Segunda."
+        : `Hola ${datos.cliente.trim().split(/\s+/)[0]}, te paso la proyección de tu seguro de retiro.`,
     lista,
   );
 
@@ -146,12 +193,12 @@ export function CotizadorRetiro() {
 
   const reiniciar = () => {
     if (hayDatos && !window.confirm("¿Borrar esta proyección y empezar una nueva?")) return;
-    setDatos(datosIniciales());
+    setDatos(datosIniciales(textos.monedaInicial));
     acciones.limpiarError();
   };
 
   const n = datos.escenarios.length;
-  const estado = lista ? `Lista para enviar · ${n} ${n === 1 ? "opción" : "opciones"}` : textoFaltantes(falta);
+  const estado = lista ? `${textos.lista} · ${n} ${n === 1 ? "opción" : "opciones"}` : textoFaltantes(falta);
   const limites = limitesAporte(datos.moneda);
   const rango = rangoEdadRetiro(fechaNacimiento, hoy);
 
@@ -171,11 +218,12 @@ export function CotizadorRetiro() {
         <PanelVistaPrevia
           vista={vista}
           titulo="Vista previa de la proyección de retiro"
+          encabezado={textos.encabezadoVista}
           vacio={
             hayVista ? null : (
               <VistaVacia
                 titulo="Todavía no hay una proyección"
-                texto="Completá la fecha de nacimiento, el sexo y cuánto quiere ahorrar por mes. La proyección aparece acá, tal cual le va a llegar al cliente."
+                texto={textos.vacio}
               />
             )
           }
@@ -183,14 +231,11 @@ export function CotizadorRetiro() {
       }
     >
       <div className="space-y-6">
-        <Secciones actual="retiro" />
+        {!paraCliente && <Secciones actual="retiro" />}
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-[26px] leading-tight font-bold tracking-[-0.02em] text-balance">Nueva proyección de retiro</h1>
-            <p className="mt-1.5 max-w-[50ch] text-[15px] leading-relaxed text-suave">
-              Cargá al cliente y armá hasta {MAX_ESCENARIOS} opciones de ahorro en el plan Futuro Protegido. La renta se
-              calcula como en el cotizador online de La Segunda, descontando los gastos del plan.
-            </p>
+            <h1 className="text-[26px] leading-tight font-bold tracking-[-0.02em] text-balance">{textos.titulo}</h1>
+            <p className="mt-1.5 max-w-[50ch] text-[15px] leading-relaxed text-suave">{textos.intro}</p>
           </div>
           {hayDatos && <BotonReiniciar onClick={reiniciar} />}
         </div>
@@ -198,20 +243,20 @@ export function CotizadorRetiro() {
 
       <section aria-labelledby="titulo-cliente" className="space-y-4">
         <h2 id="titulo-cliente" className="text-base font-semibold">
-          Cliente
+          {textos.persona}
         </h2>
-        <Campo etiqueta="Nombre y apellido">
+        <Campo etiqueta={textos.nombre}>
           <input
             className={estiloInput}
             value={datos.cliente}
             onChange={(e) => actualizar({ cliente: e.target.value })}
-            placeholder="Ej.: María Gómez"
+            placeholder={textos.ejemploNombre}
             autoComplete="off"
             enterKeyHint="next"
           />
         </Campo>
         <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:gap-3">
-          <Campo etiqueta="Fecha de nacimiento" ayuda={<AyudaNacimiento estado={nacimiento} />}>
+          <Campo etiqueta="Fecha de nacimiento" ayuda={<AyudaNacimiento estado={nacimiento} tiene={textos.tieneEdad} />}>
             <input
               className={`${estiloInput} tabular-nums ${aviso(nacimiento.tipo === "invalida" || nacimiento.tipo === "fuera-de-rango")}`}
               value={datos.nacimiento}
@@ -265,6 +310,8 @@ export function CotizadorRetiro() {
             estado={estados[i]}
             moneda={datos.moneda}
             rango={rango}
+            textos={textos}
+            conRecomendada={!paraCliente}
             enfocar={enfocar === e.id}
             alEnfocar={() => setEnfocar(null)}
             onCambiar={(cambio) => cambiarEscenario(e.id, cambio)}
@@ -287,13 +334,20 @@ export function CotizadorRetiro() {
           </p>
         )}
 
-        <p className="text-[13px] leading-relaxed text-suave">
-          Para otros aportes o edades, La Segunda atiende en{" "}
-          <a href="mailto:retiro@lasegunda.com.ar" className="font-medium text-tinta underline decoration-linea underline-offset-2 hover:decoration-rojo">
-            retiro@lasegunda.com.ar
-          </a>
-          .
-        </p>
+        {paraCliente ? (
+          <ContactoAgencia />
+        ) : (
+          <>
+            <p className="text-[13px] leading-relaxed text-suave">
+              Para otros aportes o edades, La Segunda atiende en{" "}
+              <a href="mailto:retiro@lasegunda.com.ar" className={estiloEnlace}>
+                retiro@lasegunda.com.ar
+              </a>
+              .
+            </p>
+            <CopiarSimulador />
+          </>
+        )}
       </section>
     </Pantalla>
   );
@@ -301,14 +355,63 @@ export function CotizadorRetiro() {
 
 const aviso = (hay: boolean) => (hay ? "border-rojo/60 hover:border-rojo/60" : "");
 
-function AyudaNacimiento({ estado }: { estado: ReturnType<typeof estadoNacimiento> }) {
+const estiloEnlace = "font-medium text-tinta underline decoration-linea underline-offset-2 hover:decoration-rojo";
+
+/** Para el productor: copia el link del simulador para pasárselo a un cliente. */
+function CopiarSimulador() {
+  const [copiado, setCopiado] = useState(false);
+  const copiar = async () => {
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}${BASE_PATH}${RUTA_SIMULADOR}`);
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 2500);
+    } catch {
+      window.prompt("Copiá el link del simulador:", `${window.location.origin}${BASE_PATH}${RUTA_SIMULADOR}`);
+    }
+  };
+  return (
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg bg-fondo px-3.5 py-3">
+      <p className="min-w-0 flex-1 text-[13px] leading-snug text-suave">
+        ¿Querés que el cliente pruebe solo? Pasale el simulador, que le habla a él y arranca en dólares.
+      </p>
+      <button
+        type="button"
+        onClick={copiar}
+        className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-linea bg-white px-3.5 text-[13px] font-medium text-tinta transition-colors hover:border-[#dccdd2]"
+      >
+        {copiado ? <Check size={14} aria-hidden className="text-rojo" /> : <Link2 size={14} aria-hidden />}
+        {copiado ? "Link copiado" : "Copiar link"}
+      </button>
+    </div>
+  );
+}
+
+/** Para el cliente: a quién consultar. El WhatsApp sale solo si está cargado en src/config/agencia.ts. */
+function ContactoAgencia() {
+  const whatsapp = AGENCIA.whatsapp.replace(/\D/g, "");
+  return (
+    <p className="rounded-lg bg-rosa px-3.5 py-3 text-[13px] leading-relaxed text-rojo-oscuro">
+      Son valores estimados: lo que rinda de verdad puede ser más o menos. ¿Te interesa o tenés dudas? Consultalo con{" "}
+      {whatsapp ? (
+        <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2">
+          {AGENCIA.nombre} por WhatsApp
+        </a>
+      ) : (
+        <span className="font-semibold">{AGENCIA.nombre}</span>
+      )}
+      .
+    </p>
+  );
+}
+
+function AyudaNacimiento({ estado, tiene }: { estado: ReturnType<typeof estadoNacimiento>; tiene: string }) {
   const { minima, maxima } = PARAMETROS_RETIRO.edadContratacion;
   if (estado.tipo === "ok") return <span className="text-[13px] text-suave tabular-nums">{estado.edad} años</span>;
   if (estado.tipo === "invalida") return <MensajeError>Esa fecha no existe. Revisá el día y el mes.</MensajeError>;
   if (estado.tipo === "fuera-de-rango")
     return (
       <MensajeError>
-        Tiene {estado.edad} años. Se puede contratar de {minima} a {maxima}.
+        {tiene} {estado.edad} años. Se puede contratar de {minima} a {maxima}.
       </MensajeError>
     );
   return null;
@@ -357,13 +460,27 @@ type EditorEscenarioProps = {
   estado: EstadoEscenario;
   moneda: Moneda;
   rango: { minima: number; maxima: number };
+  textos: (typeof TEXTOS)[Modo];
+  conRecomendada: boolean;
   enfocar: boolean;
   alEnfocar: () => void;
   onCambiar: (cambio: Partial<Escenario>) => void;
   onQuitar?: () => void;
 };
 
-function EditorEscenario({ escenario, numero, estado, moneda, rango, enfocar, alEnfocar, onCambiar, onQuitar }: EditorEscenarioProps) {
+function EditorEscenario({
+  escenario,
+  numero,
+  estado,
+  moneda,
+  rango,
+  textos,
+  conRecomendada,
+  enfocar,
+  alEnfocar,
+  onCambiar,
+  onQuitar,
+}: EditorEscenarioProps) {
   const aporteRef = useRef<HTMLInputElement>(null);
   const edad = Number(escenario.edadRetiro) || 0;
   const errorAporte = estado.tipo === "aporte-fuera-de-rango";
@@ -391,15 +508,17 @@ function EditorEscenario({ escenario, numero, estado, moneda, rango, enfocar, al
       <div className="flex items-center justify-between gap-2">
         <span className="text-[13px] font-semibold text-rojo">Opción {numero}</span>
         <div className="flex items-center gap-1">
-          <button
-            type="button"
-            aria-pressed={escenario.recomendada}
-            onClick={() => onCambiar({ recomendada: !escenario.recomendada })}
-            className="inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium text-suave transition-colors duration-200 hover:bg-fondo hover:text-tinta aria-pressed:bg-rojo aria-pressed:text-white aria-pressed:hover:bg-rojo-oscuro aria-pressed:hover:text-white"
-          >
-            <Star size={14} aria-hidden fill={escenario.recomendada ? "currentColor" : "none"} />
-            Recomendada
-          </button>
+          {conRecomendada && (
+            <button
+              type="button"
+              aria-pressed={escenario.recomendada}
+              onClick={() => onCambiar({ recomendada: !escenario.recomendada })}
+              className="inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium text-suave transition-colors duration-200 hover:bg-fondo hover:text-tinta aria-pressed:bg-rojo aria-pressed:text-white aria-pressed:hover:bg-rojo-oscuro aria-pressed:hover:text-white"
+            >
+              <Star size={14} aria-hidden fill={escenario.recomendada ? "currentColor" : "none"} />
+              Recomendada
+            </button>
+          )}
           {onQuitar && (
             <button
               type="button"
@@ -481,12 +600,12 @@ function EditorEscenario({ escenario, numero, estado, moneda, rango, enfocar, al
         </div>
       </div>
 
-      <Resultado estado={estado} moneda={moneda} />
+      <Resultado estado={estado} moneda={moneda} textos={textos} />
     </div>
   );
 }
 
-function Resultado({ estado, moneda }: { estado: EstadoEscenario; moneda: Moneda }) {
+function Resultado({ estado, moneda, textos }: { estado: EstadoEscenario; moneda: Moneda; textos: (typeof TEXTOS)[Modo] }) {
   if (estado.tipo === "aporte-fuera-de-rango")
     return (
       <p className="mt-3">
@@ -500,7 +619,7 @@ function Resultado({ estado, moneda }: { estado: EstadoEscenario; moneda: Moneda
     return (
       <p className="mt-3">
         <MensajeError>
-          Para este cliente, la edad de retiro va de {estado.minima} a {estado.maxima} años.
+          {textos.rangoRetiro}, la edad de retiro va de {estado.minima} a {estado.maxima} años.
         </MensajeError>
       </p>
     );
@@ -509,7 +628,7 @@ function Resultado({ estado, moneda }: { estado: EstadoEscenario; moneda: Moneda
       <p className="mt-3 rounded-lg bg-fondo px-3.5 py-3 text-[13px] leading-snug text-suave">
         {estado.tipo === "faltan-datos"
           ? "Con la fecha de nacimiento y el sexo, acá aparece la renta estimada."
-          : "Poné cuánto quiere ahorrar por mes y a qué edad se retira."}
+          : textos.faltaAporte}
       </p>
     );
 
