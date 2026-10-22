@@ -1,6 +1,7 @@
 {
   "fuente": "https://www.lasegunda.com.ar/seguros-para-autos (web pública)",
   "relevado": "2026-10-20",
+  "contrastado": "2026-10-22 con el comparativo de planes de la agencia (comparativo plane excel v2.pdf): coinciden las 168 celdas tras sumar airbag al Plan Privilegio",
   "coberturas": {
     "rc": {
       "nombre": "Responsabilidad Civil",
@@ -75,7 +76,7 @@
     "airbag": {
       "nombre": "Reposición y reinstalación de airbag",
       "detalle": "Reposición y reinstalación de los airbags del vehículo.",
-      "nota_interna": "La web pública solo lo menciona en la tarjeta resumen del Plan Selecto L2, sin detalle de límites."
+      "nota_interna": "La web pública solo lo menciona en la tarjeta del Plan Selecto L2. El comparativo de planes de la agencia (22/10/2026) lo marca en Privilegio y Selecto. No hay detalle de límites."
     },
     "conductor": {
       "nombre": "Seguro del conductor",
@@ -99,7 +100,7 @@
       "codigo": "30",
       "nombre": "Plan Privilegio",
       "tipo": "Todo Riesgo",
-      "coberturas": ["rc", "incendio_total", "incendio_parcial", "accidente_total", "accidente_parcial", "robo_total", "robo_parcial", "cristales", "parabrisas", "cubiertas", "reposicion_nuevo", "granizo", "danos_amparo_robo", "tambor", "techo", "conductor", "asistencia", "bonificacion", "cleas"]
+      "coberturas": ["rc", "incendio_total", "incendio_parcial", "accidente_total", "accidente_parcial", "robo_total", "robo_parcial", "cristales", "parabrisas", "cubiertas", "reposicion_nuevo", "granizo", "danos_amparo_robo", "tambor", "airbag", "techo", "conductor", "asistencia", "bonificacion", "cleas"]
     },
     {
       "codigo": "L200",
