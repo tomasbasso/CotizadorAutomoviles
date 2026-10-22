@@ -76,7 +76,7 @@
     "airbag": {
       "nombre": "Reposición y reinstalación de airbag",
       "detalle": "Reposición y reinstalación de los airbags del vehículo.",
-      "nota_interna": "La web pública solo lo menciona en la tarjeta del Plan Selecto L2. El comparativo de planes de la agencia (22/10/2026) lo marca en Privilegio y Selecto. No hay detalle de límites."
+      "nota_interna": "La web pública solo lo menciona en la tarjeta del Plan Selecto. El comparativo de planes de la agencia (22/10/2026) lo marca en Privilegio y Selecto. No hay detalle de límites."
     },
     "conductor": {
       "nombre": "Seguro del conductor",
@@ -104,7 +104,7 @@
     },
     {
       "codigo": "L200",
-      "nombre": "Plan Selecto L2",
+      "nombre": "Plan Selecto",
       "tipo": "Tercero Completo Full",
       "coberturas": ["rc", "incendio_total", "incendio_parcial", "accidente_total", "robo_total", "robo_parcial", "cristales", "parabrisas", "cubiertas", "reposicion_nuevo", "granizo", "danos_amparo_robo", "tambor", "airbag", "techo", "conductor", "asistencia", "bonificacion", "cleas"]
     },
@@ -128,19 +128,19 @@
     },
     {
       "codigo": "35",
-      "nombre": "Plan Compacto L2",
+      "nombre": "Plan Compacto",
       "tipo": "Incendio Full y Robo Total",
       "coberturas": ["rc", "incendio_total", "incendio_parcial", "robo_total", "cristales", "conductor", "asistencia", "bonificacion", "cleas"]
     },
     {
       "codigo": "34",
-      "nombre": "Plan Ignis L2",
+      "nombre": "Plan Ignis",
       "tipo": "Incendio Full",
       "coberturas": ["rc", "incendio_total", "incendio_parcial", "conductor", "asistencia", "bonificacion", "cleas"]
     },
     {
       "codigo": "20",
-      "nombre": "Plan Arranque L2",
+      "nombre": "Plan Arranque",
       "tipo": "Responsabilidad Civil",
       "coberturas": ["rc", "bonificacion", "cleas"]
     }
