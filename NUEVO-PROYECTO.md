@@ -14,6 +14,7 @@ Etapa actual: 6. Publicar (publicado en https://tomasbasso.github.io/CotizadorAu
 - 2026-10-20 Franquicia del Plan 30: porcentaje y monto en pesos.
 - 2026-10-20 Diseño: guía de marca La Segunda (rojo #e20039, Sora, mosaico rojo, crédito AGENCIA WINIFREDA). Detalle en DESIGN.md.
 - 2026-10-20 Planes y coberturas relevados de lasegunda.com.ar → datos/planes-auto.json. Si cambian planes o límites de RC, hay que actualizar ese archivo.
+- 2026-10-22 Planes contrastados con el comparativo de la agencia (168 celdas): se sumó airbag al Plan Privilegio y se sacó el sufijo "L2" de los nombres (Selecto, Compacto, Ignis, Arranque). El código L200 queda igual.
 - 2026-10-20 Se suma Retiro: ingeniería inversa del cotizador público (el cálculo corre en el navegador; verificado contra el sitio con coincidencia exacta). Fórmula y parámetros en src/lib/retiro.ts y datos/retiro.json. Pestaña /retiro con hasta 3 opciones de ahorro (moneda única por PDF) y PDF de una hoja.
 - 2026-10-20 Pantallas y PDF comparten encabezado, barra de acciones, vista previa, franja y pie (src/components/comun.tsx, src/pdf/comun.tsx). El PDF de autos quedó idéntico píxel por píxel.
 - 2026-10-20 Retiro sigue las condiciones de Futuro Protegido de la hoja para agencias: descuenta gastos administrativos además de la tasa SSN (los montos dan ~1 % por debajo del sitio), contratación hasta 65 años, y el PDF suma mínimo garantizado, rescates, formas de cobro, beneficios y el rendimiento real de la cartera (informe mensual). El PDF pasa a 2 hojas.
