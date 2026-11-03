@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Download, Eye, LoaderCircle, RotateCcw, Share2 } from "lucide-react";
+import { CircleAlert, Download, Eye, LoaderCircle, RotateCcw, Share2 } from "lucide-react";
 import { type ButtonHTMLAttributes, type ReactNode, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { conBase } from "@/lib/rutas";
 
@@ -142,7 +142,7 @@ export function useAccionesPDF(armar: () => Promise<File>, textoCompartir: () =>
   return { accion, error, limpiarError: () => setError(""), ejecutar };
 }
 
-export type Seccion = "auto" | "retiro";
+export type Seccion = "auto" | "retiro" | "granizo";
 
 /** Pantalla de dos columnas: carga a la izquierda y vista previa del PDF a la derecha (en escritorio). */
 export function Pantalla({ children, barra, vistaPrevia }: { children: ReactNode; barra: ReactNode; vistaPrevia: ReactNode }) {
@@ -194,6 +194,7 @@ function Mosaico({ className = "" }: { className?: string }) {
 const SECCIONES: { valor: Seccion; texto: string; ruta: string }[] = [
   { valor: "auto", texto: "Auto", ruta: "/" },
   { valor: "retiro", texto: "Retiro", ruta: "/retiro" },
+  { valor: "granizo", texto: "Granizo", ruta: "/granizo" },
 ];
 
 /** Selector entre los cotizadores. Link ya le suma el prefijo de GitHub Pages. */
@@ -384,6 +385,46 @@ export function VistaVacia({ titulo, texto }: { titulo: string; texto: string })
         <p className="mt-6 text-base font-semibold">{titulo}</p>
         <p className="mt-1.5 text-[14px] leading-relaxed text-suave">{texto}</p>
       </div>
+    </div>
+  );
+}
+
+export function MensajeError({ children }: { children: ReactNode }) {
+  return (
+    <span className="flex items-start gap-1.5 text-[13px] leading-snug text-rojo-oscuro">
+      <CircleAlert size={14} className="mt-[2px] shrink-0" aria-hidden />
+      <span>{children}</span>
+    </span>
+  );
+}
+
+type SegmentosProps<T extends string> = {
+  opciones: { valor: T; texto: string }[];
+  valor: T | "";
+  onCambiar: (valor: T) => void;
+  etiqueta: (o: { valor: T; texto: string }) => string;
+  chico?: boolean;
+  /** Opciones que no se pueden elegir con lo cargado (por ejemplo, Plan Canje con girasol). */
+  deshabilitada?: (valor: T) => boolean;
+};
+
+/** Botones unidos para elegir una sola opción (sexo, moneda, cultivo). */
+export function Segmentos<T extends string>({ opciones, valor, onCambiar, etiqueta, chico, deshabilitada }: SegmentosProps<T>) {
+  return (
+    <div className={`grid gap-1 bg-fondo p-1 ${chico ? "h-9 rounded-full" : "h-11 rounded-lg"}`} style={{ gridTemplateColumns: `repeat(${opciones.length}, minmax(0, 1fr))` }}>
+      {opciones.map((o) => (
+        <button
+          key={o.valor}
+          type="button"
+          aria-pressed={valor === o.valor}
+          aria-label={etiqueta(o)}
+          disabled={deshabilitada?.(o.valor)}
+          onClick={() => onCambiar(o.valor)}
+          className={`min-w-0 truncate px-1 text-[14px] font-semibold text-suave transition-colors duration-200 hover:text-tinta disabled:cursor-not-allowed disabled:text-[#b5a9ad] disabled:hover:text-[#b5a9ad] aria-pressed:bg-white aria-pressed:text-rojo aria-pressed:shadow-[0_1px_2px_rgba(35,26,29,0.08),0_4px_10px_-6px_rgba(35,26,29,0.25)] ${chico ? "rounded-full text-[13px]" : "rounded-md"}`}
+        >
+          {o.texto}
+        </button>
+      ))}
     </div>
   );
 }

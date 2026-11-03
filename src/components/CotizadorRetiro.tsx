@@ -1,7 +1,7 @@
 "use client";
 
-import { Check, CircleAlert, Link2, Minus, Plus, Star, X } from "lucide-react";
-import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { Check, Link2, Minus, Plus, Star, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AGENCIA } from "@/config/agencia";
 import { numeroCotizacion, precioParaInput } from "@/lib/cotizacion";
 import {
@@ -34,7 +34,9 @@ import {
   BarraAcciones,
   BotonReiniciar,
   Campo,
+  MensajeError,
   PanelVistaPrevia,
+  Segmentos,
   Pantalla,
   Secciones,
   VistaVacia,
@@ -415,43 +417,6 @@ function AyudaNacimiento({ estado, tiene }: { estado: ReturnType<typeof estadoNa
       </MensajeError>
     );
   return null;
-}
-
-function MensajeError({ children }: { children: ReactNode }) {
-  return (
-    <span className="flex items-start gap-1.5 text-[13px] leading-snug text-rojo-oscuro">
-      <CircleAlert size={14} className="mt-[2px] shrink-0" aria-hidden />
-      <span>{children}</span>
-    </span>
-  );
-}
-
-type SegmentosProps<T extends string> = {
-  opciones: { valor: T; texto: string }[];
-  valor: T | "";
-  onCambiar: (valor: T) => void;
-  etiqueta: (o: { valor: T; texto: string }) => string;
-  chico?: boolean;
-};
-
-/** Botones unidos para elegir una sola opción (sexo, moneda). */
-function Segmentos<T extends string>({ opciones, valor, onCambiar, etiqueta, chico }: SegmentosProps<T>) {
-  return (
-    <div className={`grid gap-1 bg-fondo p-1 ${chico ? "h-9 rounded-full" : "h-11 rounded-lg"}`} style={{ gridTemplateColumns: `repeat(${opciones.length}, minmax(0, 1fr))` }}>
-      {opciones.map((o) => (
-        <button
-          key={o.valor}
-          type="button"
-          aria-pressed={valor === o.valor}
-          aria-label={etiqueta(o)}
-          onClick={() => onCambiar(o.valor)}
-          className={`text-[14px] font-semibold text-suave transition-colors duration-200 hover:text-tinta aria-pressed:bg-white aria-pressed:text-rojo aria-pressed:shadow-[0_1px_2px_rgba(35,26,29,0.08),0_4px_10px_-6px_rgba(35,26,29,0.25)] ${chico ? "rounded-full text-[13px]" : "rounded-md"}`}
-        >
-          {o.texto}
-        </button>
-      ))}
-    </div>
-  );
 }
 
 type EditorEscenarioProps = {

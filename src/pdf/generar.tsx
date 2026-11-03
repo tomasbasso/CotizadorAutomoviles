@@ -1,8 +1,10 @@
 import { pdf } from "@react-pdf/renderer";
 import type { Cotizacion } from "@/lib/cotizacion";
+import type { CotizacionGranizo } from "@/lib/granizo";
 import type { CotizacionRetiro } from "@/lib/retiro";
 import { BASE_PATH } from "@/lib/rutas";
 import { CotizacionPDF } from "./CotizacionPDF";
+import { GranizoPDF } from "./GranizoPDF";
 import { RetiroPDF } from "./RetiroPDF";
 
 const base = () => `${window.location.origin}${BASE_PATH}`;
@@ -14,4 +16,8 @@ export function generarPDF(cotizacion: Cotizacion): Promise<Blob> {
 
 export function generarPDFRetiro(cotizacion: CotizacionRetiro): Promise<Blob> {
   return pdf(<RetiroPDF cotizacion={cotizacion} base={base()} />).toBlob();
+}
+
+export function generarPDFGranizo(cotizacion: CotizacionGranizo): Promise<Blob> {
+  return pdf(<GranizoPDF cotizacion={cotizacion} base={base()} />).toBlob();
 }
