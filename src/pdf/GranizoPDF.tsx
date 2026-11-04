@@ -141,21 +141,9 @@ export function GranizoPDF({ cotizacion: c, base }: { cotizacion: CotizacionGran
                 <Text style={s.filaTexto}>Suma asegurada</Text>
                 <Text style={s.filaValor}>{monto(estado.sumaAsegurada, u)}</Text>
               </View>
-              {(
-                [
-                  ["Descuento de la agencia", c.descuentoAgencia],
-                  ["Descuento de La Segunda", c.descuentoLaSegunda],
-                ] as const
-              )
-                .filter(([, v]) => leerNumero(v) > 0)
-                .map(([texto, v]) => (
-                  <View key={texto} style={s.fila}>
-                    <Text style={s.filaTexto}>{texto}</Text>
-                    <Text style={s.filaValor}>− {porcentaje(leerNumero(v), 1)}</Text>
-                  </View>
-                ))}
+              {/* Los descuentos no se muestran al cliente: la tasa ya los trae aplicados. */}
               <View style={s.fila}>
-                <Text style={s.filaTexto}>Tasa aplicada{leerNumero(c.descuentoAgencia) + leerNumero(c.descuentoLaSegunda) > 0 ? " (con descuentos)" : ""}</Text>
+                <Text style={s.filaTexto}>Tasa aplicada</Text>
                 <Text style={s.filaValor}>{porcentaje(estado.tasaFinal, 3)}</Text>
               </View>
               <View style={s.fila}>
