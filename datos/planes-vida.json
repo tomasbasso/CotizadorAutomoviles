@@ -1,0 +1,230 @@
+{
+  "ramo": "vida",
+  "nombre": "Vida",
+  "fuente": "https://www.lasegunda.com.ar/seguros-de-vida-individual (web pública; textos de https://wwwlasegundal2prodnj-api.azurewebsites.net/api/common/plan?route=temporarios, dotales y entera)",
+  "relevado": "2026-11-18",
+  "cotizacion": {
+    "titulo": "Nueva cotización de vida",
+    "bajada": "Cargá el cliente, elegí hasta 3 planes con su suma asegurada y poné el precio de cada uno.",
+    "asunto": "Seguro de vida",
+    "saludo": "te paso la cotización del seguro de vida",
+    "campos": [
+      {
+        "id": "edad",
+        "etiqueta": "Edad",
+        "placeholder": "Ej.: 42",
+        "tipo": "edad",
+        "max": 64,
+        "avisoMax": "La edad máxima de ingreso es 64 años."
+      }
+    ],
+    "monedas": [
+      "ars",
+      "usd"
+    ],
+    "periodos": [
+      "mes",
+      "semestre",
+      "año"
+    ],
+    "plazo": {
+      "etiqueta": "Plazo",
+      "sugerencias": [
+        "1 año",
+        "5 años",
+        "10 años",
+        "Hasta los 65"
+      ],
+      "fijo": {
+        "entera": "De por vida"
+      }
+    }
+  },
+  "coberturas": {
+    "fallecimiento": {
+      "nombre": "Fallecimiento",
+      "detalle": "Cobertura principal. Es el importe pagadero en caso de siniestro, previamente estipulado en las condiciones de póliza. Contratación en pesos y dólares."
+    },
+    "sobrevida": {
+      "nombre": "Capital de sobrevida",
+      "detalle": "Se establece una suma asegurada de fallecimiento y una suma asegurada de sobrevida. Este último capital podrá ser igual o inferior a la suma asegurada por fallecimiento. Contratación en pesos y dólares."
+    },
+    "invalidez": {
+      "nombre": "Invalidez total y permanente",
+      "detalle": "Invalidez total y permanente por enfermedad y/o accidente."
+    },
+    "doble_accidental": {
+      "nombre": "Doble pago por muerte accidental",
+      "detalle": "Doble pago de suma asegurada por fallecimiento accidental, pudiendo amparar desmembramientos."
+    },
+    "alta_complejidad": {
+      "nombre": "Alta complejidad médica",
+      "detalle": "Alta complejidad médica."
+    },
+    "trasplante": {
+      "nombre": "Trasplante de órganos",
+      "detalle": "Trasplante de órganos."
+    },
+    "anticipo": {
+      "nombre": "Anticipo por enfermedad terminal o crítica",
+      "detalle": "Anticipo de suma asegurada ante una enfermedad terminal y crítica."
+    }
+  },
+  "grupos": [
+    {
+      "nombre": "Cobertura principal",
+      "filas": [
+        {
+          "id": "fallecimiento",
+          "nombre": "Fallecimiento",
+          "cobertura": "fallecimiento",
+          "suma": true,
+          "requerida": true,
+          "destacada": true
+        },
+        {
+          "id": "sobrevida",
+          "nombre": "Capital de sobrevida (al terminar el plazo)",
+          "cobertura": "sobrevida",
+          "suma": true
+        }
+      ]
+    },
+    {
+      "nombre": "Coberturas adicionales",
+      "filas": [
+        {
+          "id": "invalidez",
+          "nombre": "Invalidez total y permanente",
+          "cobertura": "invalidez",
+          "suma": true,
+          "opcional": true
+        },
+        {
+          "id": "doble_accidental",
+          "nombre": "Doble pago por muerte accidental",
+          "cobertura": "doble_accidental",
+          "suma": true,
+          "opcional": true
+        },
+        {
+          "id": "alta_complejidad",
+          "nombre": "Alta complejidad médica",
+          "cobertura": "alta_complejidad",
+          "suma": true,
+          "opcional": true
+        },
+        {
+          "id": "trasplante",
+          "nombre": "Trasplante de órganos",
+          "cobertura": "trasplante",
+          "suma": true,
+          "opcional": true
+        },
+        {
+          "id": "anticipo",
+          "nombre": "Anticipo por enfermedad terminal o crítica",
+          "cobertura": "anticipo",
+          "suma": true,
+          "opcional": true
+        }
+      ]
+    }
+  ],
+  "planes": [
+    {
+      "codigo": "temporario",
+      "nombre": "Vida Temporario",
+      "tipo": "Por el plazo que elijas",
+      "coberturas": [
+        "fallecimiento",
+        "invalidez",
+        "doble_accidental",
+        "alta_complejidad",
+        "trasplante",
+        "anticipo"
+      ],
+      "sobre": {
+        "titular": "Una cobertura con la duración que necesites",
+        "intro": "Te brindamos un respaldo preciso que te cubre las 24 horas en todo el mundo, durante el plazo de tiempo que definas al momento de su contratación.\nPodés contratarlo por períodos anuales, o por un plazo mayor (3, 5, 10 años, etcétera) o hasta determinadas edades máximas (65, 70 años).",
+        "vinetas": [
+          {
+            "titulo": "Beneficiario",
+            "texto": "La designación de beneficiarios se realiza libremente y puede modificarse en cualquier instancia de la póliza."
+          },
+          {
+            "titulo": "Costo",
+            "texto": "Permanece invariable durante toda la vigencia."
+          },
+          {
+            "titulo": "Edad máxima de ingreso",
+            "texto": "64 años."
+          }
+        ]
+      }
+    },
+    {
+      "codigo": "dotal",
+      "nombre": "Vida Dotal",
+      "tipo": "Seguro de vida con ahorro",
+      "coberturas": [
+        "fallecimiento",
+        "sobrevida",
+        "invalidez",
+        "doble_accidental",
+        "alta_complejidad",
+        "trasplante",
+        "anticipo"
+      ],
+      "sobre": {
+        "titular": "Sumale un ahorro a tu Seguro de Vida",
+        "intro": "Se trata de un seguro mixto en el que el asegurado define el plazo y el capital, recuperando al final del período pactado, hasta el 100% de la suma asegurada contratada. En caso de fallecimiento del asegurado, se indemniza a los beneficiarios designados.",
+        "vinetas": [
+          {
+            "titulo": "Beneficiario",
+            "texto": "La designación de beneficiarios se realiza libremente y puede modificarse en cualquier instancia de la póliza."
+          },
+          {
+            "titulo": "Costo",
+            "texto": "Permanece invariable durante toda la vigencia."
+          },
+          {
+            "titulo": "Edad máxima de ingreso",
+            "texto": "64 años."
+          }
+        ]
+      }
+    },
+    {
+      "codigo": "entera",
+      "nombre": "Vida Entera",
+      "tipo": "Cobertura de por vida",
+      "coberturas": [
+        "fallecimiento",
+        "invalidez",
+        "doble_accidental",
+        "alta_complejidad",
+        "trasplante",
+        "anticipo"
+      ],
+      "sobre": {
+        "titular": "Una cobertura de por vida, un respaldo para tu familia",
+        "intro": "Otorgan cobertura al asegurado por el resto de su vida, desde el momento de su contratación.",
+        "vinetas": [
+          {
+            "titulo": "Beneficiario",
+            "texto": "La designación de beneficiarios se realiza libremente y puede modificarse en cualquier instancia de la póliza."
+          },
+          {
+            "titulo": "Costo",
+            "texto": "El costo del seguro permanece invariable durante toda la vigencia."
+          },
+          {
+            "titulo": "Edad máxima de ingreso",
+            "texto": "64 años."
+          }
+        ]
+      }
+    }
+  ]
+}

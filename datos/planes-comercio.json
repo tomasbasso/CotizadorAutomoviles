@@ -1,0 +1,260 @@
+{
+  "ramo": "comercio",
+  "nombre": "Comercio",
+  "fuente": "https://www.lasegunda.com.ar/integral/seguros-para-empresas (web pública; textos de https://wwwlasegundal2prodnj-api.azurewebsites.net/api/common/plan?route=seguros-para-empresas)",
+  "relevado": "2026-11-18",
+  "nota_interna": "La web publica un solo plan (Multicobertura de Comercio) con 15 coberturas que se arman según la actividad. Por eso cada cobertura se tilda por opción; las que vienen marcadas de entrada son las de cualquier comercio.",
+  "cotizacion": {
+    "titulo": "Nueva cotización de comercio",
+    "bajada": "Cargá el comercio, elegí las coberturas de cada opción y poné el precio. Podés armar hasta 3 opciones con distintas sumas.",
+    "asunto": "Seguro integral de comercio",
+    "saludo": "te paso la cotización del seguro de tu comercio",
+    "campos": [
+      {
+        "id": "actividad",
+        "etiqueta": "Comercio o actividad",
+        "placeholder": "Ej.: Almacén de ramos generales",
+        "requerido": "la actividad del comercio"
+      },
+      {
+        "id": "ubicacion",
+        "etiqueta": "Ubicación",
+        "placeholder": "Ej.: Av. Mitre 120, Winifreda"
+      }
+    ],
+    "monedas": [
+      "ars"
+    ],
+    "periodos": [
+      "mes",
+      "cuatrimestre",
+      "semestre",
+      "año"
+    ]
+  },
+  "coberturas": {
+    "rc_linderos": {
+      "nombre": "Responsabilidad Civil Linderos",
+      "detalle": "Nos comprometemos a protegerte frente a cualquier responsabilidad civil que surja como consecuencia de un incendio o explosión, ya sea directa o indirectamente. Esto significa que, si resultás responsable de daños materiales a terceros debido a uno de estos incidentes, estaremos a tu lado para indemnizar a los afectados, siempre dentro de los términos de tu póliza. Cabe destacar que esta cobertura no incluye lesiones personales ni fallecimientos de terceros."
+    },
+    "rc_comprensiva": {
+      "nombre": "Responsabilidad Civil Comprensiva",
+      "detalle": "En La Segunda te ofrecemos la tranquilidad de saber que estás protegido frente a cualquier reclamo de terceros por daños que puedan surgir durante el desarrollo de tu actividad. Nuestra cobertura se adapta a tus necesidades y te respalda ante los riesgos más comunes, para que puedas concentrarte en lo que realmente importa, tu negocio.\nEsta protección abarca los siguientes riesgos:\n• Incendios, rayos, explosiones, descargas eléctricas y  escapes de gas.\n• Daños causados por carteles, letreros y objetos similares.\n• Guarda y depósito de vehículos.\n• Instalaciones de vapor, agua caliente o aceite caliente.\n• Intoxicación por alimentos y bebidas.\n• Uso de armas de fuego.\n• Carga y descarga de bienes fuera de tu local.\n• Ascensores y montacargas.\n• Uso de piscinas y juegos infantiles."
+    },
+    "agua": {
+      "nombre": "Daños por agua e inundación",
+      "detalle": "En La Segunda cuidamos de tus bienes ante cualquier imprevisto relacionado con el agua. Con esta cobertura, estarás protegido contra filtraciones accidentales, roturas de cañerías e inundaciones causadas por lluvias intensas o desbordes de ríos cercanos. Nos aseguramos de que tanto tu edificio como su contenido estén siempre resguardados, para que puedas estar tranquilo ante cualquier eventualidad inesperada."
+    },
+    "incendio": {
+      "nombre": "Incendio edificio y contenido",
+      "detalle": "En La Segunda te brindamos cobertura ante daños causados por fuego, rayos, explosiones, vandalismo, actos malintencionados, tumultos, huelgas y daños por humo. Además, estamos acá para protegerte contra impactos de vehículos, aeronaves y cualquier daño ocasionado por partes o cargas transportadas."
+    },
+    "robo_contenido": {
+      "nombre": "Robo contenido general",
+      "detalle": "Te ofrecemos una cobertura en caso de robo de tus pertenencias mientras estén en la ubicación asegurada y sean de tu propiedad."
+    },
+    "robo_terceros": {
+      "nombre": "Robo bienes de terceros",
+      "detalle": "Te ofrecemos cobertura en caso de robo de las pertenencias de tus huéspedes, ya sea en la habitación del hotel o dentro de su cabaña en complejos turísticos.\nTené en cuenta que el hurto no está incluido en esta cobertura."
+    },
+    "robo_valores": {
+      "nombre": "Robo valores",
+      "detalle": "Protegemos tus bienes más valiosos. Con nuestra cobertura por robo de valores, te respaldamos ante la pérdida de objetos importantes que se encuentren en la ubicación asegurada. Ya sea dinero en efectivo, joyas u otros bienes preciados, te garantizamos que estarán protegidos, brindándote la tranquilidad que necesitás."
+    },
+    "robo_valores_transito": {
+      "nombre": "Robo valores en tránsito",
+      "detalle": "En La Segunda cuidamos de tus valores incluso mientras están en movimiento. Te ofrecemos protección frente a la pérdida por robo de los bienes relacionados con tu negocio mientras estén en tránsito dentro de la República Argentina, ya sea que los transportes vos o tus empleados. Con esta cobertura tus valores estarán siempre protegidos, sin importar a dónde vayan."
+    },
+    "cristales": {
+      "nombre": "Cristales",
+      "detalle": "Te ofrecemos cobertura para rotura o grieta en los cristales, vidrios y espejos de tu edificio asegurado. Además, cubrimos los gastos de instalación para que todo vuelva a estar en perfecto estado sin complicaciones."
+    },
+    "electronicos": {
+      "nombre": "Equipos electrónicos",
+      "detalle": "Te brindamos la tranquilidad de saber que tus equipos electrónicos están protegidos ante cualquier imprevisto. Nuestra cobertura te respalda frente a incendios, robos y daños accidentales, asegurando que tus dispositivos estén siempre a salvo. Esta protección aplica a los equipos que se encuentren dentro de la ubicación asegurada y sean de tu propiedad, para que puedas operar sin preocupaciones."
+    },
+    "electronicos_transito": {
+      "nombre": "Equipos electrónicos en tránsito",
+      "detalle": "Nos encargamos de proteger tus equipos electrónicos no solo cuando están en la ubicación asegurada, sino también mientras están en tránsito, en cualquier parte del mundo. Te cubrimos frente a incendios, robos y daños accidentales, asegurando que tus dispositivos estén siempre protegidos, sin importar dónde te encuentres. Esta cobertura se aplica exclusivamente a los equipos de tu propiedad, brindándote total tranquilidad mientras transportás tus dispositivos electrónicos."
+    },
+    "solares": {
+      "nombre": "Paneles y termotanques solares; Antenas satelitales",
+      "detalle": "Paneles solares fotovoltaicos con sus respectivos inversores de corriente y demás accesorios destinados al funcionamiento del equipo; termotanques solares y/o antenas de conexión satelital.\nFranquicia: 10% del monto a indemnizar."
+    },
+    "danos_robo": {
+      "nombre": "Daños por robo",
+      "detalle": "En La Segunda te respaldamos frente a los daños ocasionados a tu edificio y/o su contenido como resultado de un robo o intento de robo. Nuestra cobertura te ofrece tranquilidad al indemnizarte por los perjuicios causados para que puedas centrarte en lo que importa sin preocuparte por lo inesperado."
+    },
+    "perdida_beneficio": {
+      "nombre": "Pérdida de beneficio",
+      "detalle": "En La Segunda protegemos la estabilidad de tu negocio. Nuestra cobertura te respalda ante la pérdida de beneficios netos, gastos fijos, sueldos, jornales y cargas sociales que puedan surgir si tu actividad se ve interrumpida por un evento cubierto en tu póliza. Con nosotros, tu empresa seguirá adelante, incluso en momentos difíciles."
+    },
+    "carteles": {
+      "nombre": "Carteles",
+      "detalle": "En La Segunda te protegemos contra los daños que puedan sufrir tus carteles y letreros a causa de incendios, vendavales, tornados, ciclones, huracanes y granizo. Con nuestra cobertura, tu comunicación visual estará protegida, sin importar las condiciones climáticas adversas."
+    }
+  },
+  "grupos": [
+    {
+      "nombre": "Incendio y daños",
+      "filas": [
+        {
+          "id": "incendio_edificio",
+          "nombre": "Incendio del edificio",
+          "cobertura": "incendio",
+          "opcional": true,
+          "suma": true,
+          "predeterminada": true
+        },
+        {
+          "id": "incendio_contenido",
+          "nombre": "Incendio del contenido",
+          "cobertura": "incendio",
+          "opcional": true,
+          "suma": true,
+          "predeterminada": true
+        },
+        {
+          "id": "agua",
+          "nombre": "Daños por agua e inundación",
+          "cobertura": "agua",
+          "opcional": true,
+          "suma": true
+        },
+        {
+          "id": "cristales",
+          "nombre": "Cristales",
+          "cobertura": "cristales",
+          "opcional": true,
+          "suma": true,
+          "predeterminada": true
+        },
+        {
+          "id": "carteles",
+          "nombre": "Carteles y letreros",
+          "cobertura": "carteles",
+          "opcional": true,
+          "suma": true
+        },
+        {
+          "id": "solares",
+          "nombre": "Paneles solares y antenas",
+          "cobertura": "solares",
+          "opcional": true,
+          "suma": true
+        }
+      ]
+    },
+    {
+      "nombre": "Robo",
+      "filas": [
+        {
+          "id": "robo_contenido",
+          "nombre": "Robo del contenido",
+          "cobertura": "robo_contenido",
+          "opcional": true,
+          "suma": true,
+          "predeterminada": true
+        },
+        {
+          "id": "danos_robo",
+          "nombre": "Daños por robo",
+          "cobertura": "danos_robo",
+          "opcional": true,
+          "suma": true
+        },
+        {
+          "id": "robo_valores",
+          "nombre": "Robo de valores en el local",
+          "cobertura": "robo_valores",
+          "opcional": true,
+          "suma": true
+        },
+        {
+          "id": "robo_valores_transito",
+          "nombre": "Robo de valores en tránsito",
+          "cobertura": "robo_valores_transito",
+          "opcional": true,
+          "suma": true
+        },
+        {
+          "id": "robo_terceros",
+          "nombre": "Robo de bienes de huéspedes",
+          "cobertura": "robo_terceros",
+          "opcional": true,
+          "suma": true
+        }
+      ]
+    },
+    {
+      "nombre": "Responsabilidad civil",
+      "filas": [
+        {
+          "id": "rc_comprensiva",
+          "nombre": "Comprensiva (de la actividad)",
+          "cobertura": "rc_comprensiva",
+          "opcional": true,
+          "suma": true,
+          "predeterminada": true
+        },
+        {
+          "id": "rc_linderos",
+          "nombre": "A linderos (incendio)",
+          "cobertura": "rc_linderos",
+          "opcional": true,
+          "suma": true
+        }
+      ]
+    },
+    {
+      "nombre": "Equipos y actividad",
+      "filas": [
+        {
+          "id": "electronicos",
+          "nombre": "Equipos electrónicos",
+          "cobertura": "electronicos",
+          "opcional": true,
+          "suma": true
+        },
+        {
+          "id": "electronicos_transito",
+          "nombre": "Electrónicos en tránsito",
+          "cobertura": "electronicos_transito",
+          "opcional": true,
+          "suma": true
+        },
+        {
+          "id": "perdida_beneficio",
+          "nombre": "Pérdida de beneficio",
+          "cobertura": "perdida_beneficio",
+          "opcional": true,
+          "suma": true
+        }
+      ]
+    }
+  ],
+  "planes": [
+    {
+      "codigo": "multicobertura",
+      "nombre": "Multicobertura de Comercio",
+      "tipo": "Comercio, empresas e industrias",
+      "coberturas": [
+        "rc_linderos",
+        "rc_comprensiva",
+        "agua",
+        "incendio",
+        "robo_contenido",
+        "robo_terceros",
+        "robo_valores",
+        "robo_valores_transito",
+        "cristales",
+        "electronicos",
+        "electronicos_transito",
+        "solares",
+        "danos_robo",
+        "perdida_beneficio",
+        "carteles"
+      ]
+    }
+  ]
+}

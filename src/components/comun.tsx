@@ -142,7 +142,7 @@ export function useAccionesPDF(armar: () => Promise<File>, textoCompartir: () =>
   return { accion, error, limpiarError: () => setError(""), ejecutar };
 }
 
-export type Seccion = "auto" | "retiro" | "granizo";
+export type Seccion = "auto" | "hogar" | "vida" | "ap" | "retiro" | "comercio" | "granizo";
 
 /** Pantalla de dos columnas: carga a la izquierda y vista previa del PDF a la derecha (en escritorio). */
 export function Pantalla({ children, barra, vistaPrevia }: { children: ReactNode; barra: ReactNode; vistaPrevia: ReactNode }) {
@@ -193,25 +193,41 @@ function Mosaico({ className = "" }: { className?: string }) {
 
 const SECCIONES: { valor: Seccion; texto: string; ruta: string }[] = [
   { valor: "auto", texto: "Auto", ruta: "/" },
+  { valor: "hogar", texto: "Hogar", ruta: "/hogar" },
+  { valor: "vida", texto: "Vida", ruta: "/vida" },
+  { valor: "ap", texto: "Accidentes", ruta: "/accidentes-personales" },
   { valor: "retiro", texto: "Retiro", ruta: "/retiro" },
+  { valor: "comercio", texto: "Comercio", ruta: "/comercio" },
   { valor: "granizo", texto: "Granizo", ruta: "/granizo" },
 ];
 
-/** Selector entre los cotizadores. Link ya le suma el prefijo de GitHub Pages. */
+/**
+ * Selector entre los cotizadores. Link ya le suma el prefijo de GitHub Pages.
+ * En el celular no entran todos: se desliza de costado y arranca con el actual a la vista.
+ */
 export function Secciones({ actual }: { actual: Seccion }) {
+  const contenedor = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const caja = contenedor.current;
+    const activo = caja?.querySelector<HTMLElement>("[aria-current=page]");
+    if (!caja || !activo) return;
+    caja.scrollLeft = activo.offsetLeft - (caja.clientWidth - activo.offsetWidth) / 2;
+  }, [actual]);
   return (
-    <nav aria-label="Tipo de seguro" className="inline-flex rounded-full bg-fondo p-1">
-      {SECCIONES.map((s) => (
-        <Link
-          key={s.valor}
-          href={s.ruta}
-          aria-current={s.valor === actual ? "page" : undefined}
-          className="inline-flex h-8 items-center rounded-full px-4 text-[13px] font-semibold text-suave transition-colors duration-200 hover:text-tinta aria-[current=page]:bg-white aria-[current=page]:text-tinta aria-[current=page]:shadow-[0_1px_2px_rgba(35,26,29,0.08),0_4px_10px_-6px_rgba(35,26,29,0.25)]"
-        >
-          {s.texto}
-        </Link>
-      ))}
-    </nav>
+    <div ref={contenedor} className="relative -mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
+      <nav aria-label="Tipo de seguro" className="inline-flex rounded-full bg-fondo p-1">
+        {SECCIONES.map((s) => (
+          <Link
+            key={s.valor}
+            href={s.ruta}
+            aria-current={s.valor === actual ? "page" : undefined}
+            className="inline-flex h-8 shrink-0 items-center rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap text-suave transition-colors duration-200 hover:text-tinta aria-[current=page]:bg-white aria-[current=page]:text-tinta aria-[current=page]:shadow-[0_1px_2px_rgba(35,26,29,0.08),0_4px_10px_-6px_rgba(35,26,29,0.25)]"
+          >
+            {s.texto}
+          </Link>
+        ))}
+      </nav>
+    </div>
   );
 }
 

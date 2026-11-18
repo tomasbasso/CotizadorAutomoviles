@@ -1,10 +1,12 @@
 import { pdf } from "@react-pdf/renderer";
 import type { Cotizacion } from "@/lib/cotizacion";
 import type { CotizacionGranizo } from "@/lib/granizo";
+import type { CotizacionRamo } from "@/lib/ramos";
 import type { CotizacionRetiro } from "@/lib/retiro";
 import { BASE_PATH } from "@/lib/rutas";
 import { CotizacionPDF } from "./CotizacionPDF";
 import { GranizoPDF } from "./GranizoPDF";
+import { RamoPDF } from "./RamoPDF";
 import { RetiroPDF } from "./RetiroPDF";
 
 const base = () => `${window.location.origin}${BASE_PATH}`;
@@ -20,4 +22,9 @@ export function generarPDFRetiro(cotizacion: CotizacionRetiro): Promise<Blob> {
 
 export function generarPDFGranizo(cotizacion: CotizacionGranizo): Promise<Blob> {
   return pdf(<GranizoPDF cotizacion={cotizacion} base={base()} />).toBlob();
+}
+
+/** Hogar, vida, accidentes personales y comercio. */
+export function generarPDFRamo(cotizacion: CotizacionRamo): Promise<Blob> {
+  return pdf(<RamoPDF cotizacion={cotizacion} base={base()} />).toBlob();
 }

@@ -1,8 +1,13 @@
 # Cotizador La Segunda · Agencia Winifreda
 
-Arma PDFs para mandarle al cliente, en tres pestañas:
+Arma PDFs para mandarle al cliente, en siete pestañas:
 
 - **Auto**: se cargan el cliente y el vehículo, se eligen hasta 3 planes de La Segunda, se pone el precio de cada uno y se descarga o comparte el PDF.
+- **Hogar, Vida, Accidentes y Comercio**: el mismo armado que Auto. Se carga el cliente (más la vivienda, la edad, la actividad o la vigencia, según el ramo), se eligen hasta 3 planes, se pone el precio a mano y, si se quiere, las sumas aseguradas y las coberturas opcionales. El PDF compara las opciones y explica cada cobertura con los textos de La Segunda.
+  - Hogar: Hogar Selecto, Vivienda de alquiler y Vivienda transitoria.
+  - Vida: Temporario, Dotal y Entera, en pesos o dólares, con plazo y adicionales (invalidez, doble pago por muerte accidental, alta complejidad médica, trasplante de órganos, anticipo por enfermedad terminal o crítica).
+  - Accidentes personales: Plan Especial y Plan Premium, con las sumas mínimas y máximas que publica La Segunda.
+  - Comercio: Multicobertura de Comercio, con las coberturas a elección.
 - **Retiro**: se cargan nombre, fecha de nacimiento y sexo del cliente, y hasta 3 opciones de ahorro mensual con su edad de retiro. La renta mensual y los fondos acumulados se calculan como en el cotizador online de La Segunda, descontando además los gastos del plan Futuro Protegido.
 - **Granizo**: Cosecha Gruesa 2026/27. Se eligen provincia, departamento, cultivo y cobertura (granizo, granizo + viento o granizo + viento + helada), se cargan hectáreas y valor por hectárea (en pesos, dólares o quintales), franquicia, resiembra, forma de pago y condición fiscal, y calcula prima, recargo, premio y vigencia con las tasas de la circular 02/2026 de La Segunda. Es una referencia: el número que vale es el del sistema de propuestas.
 
@@ -17,7 +22,7 @@ npm install
 npm run dev
 ```
 
-Abrí http://localhost:3000. En desarrollo, http://localhost:3000/?demo precarga una cotización de auto de ejemplo, http://localhost:3000/retiro/?demo una proyección de retiro (con `?demo=1`, de una sola opción) y http://localhost:3000/granizo/?demo la cotización de granizo con la que se calibró el cálculo.
+Abrí http://localhost:3000. En desarrollo, http://localhost:3000/?demo precarga una cotización de auto de ejemplo, http://localhost:3000/retiro/?demo una proyección de retiro (con `?demo=1`, de una sola opción), http://localhost:3000/granizo/?demo la cotización de granizo con la que se calibró el cálculo, y `/hogar/?demo`, `/vida/?demo`, `/accidentes-personales/?demo` y `/comercio/?demo` una de cada ramo.
 
 ## Qué editar
 
@@ -28,10 +33,13 @@ Abrí http://localhost:3000. En desarrollo, http://localhost:3000/?demo precarga
 | Orden y agrupado de las coberturas en la tabla, notas como "Hasta 10%" | `src/lib/planes.ts` |
 | Diseño del PDF | `src/pdf/CotizacionPDF.tsx` (auto), `src/pdf/RetiroPDF.tsx` (retiro); franja, mosaico y pie compartidos en `src/pdf/comun.tsx` |
 | Pantalla de carga | `src/components/Cotizador.tsx` (auto), `src/components/CotizadorRetiro.tsx` (retiro y simulador para clientes, con `modo` "productor" o "cliente"; los textos de cada modo están en `TEXTOS`); piezas compartidas en `src/components/comun.tsx` |
+| Hogar, Vida, Accidentes y Comercio: planes, coberturas, textos, grupos de la tabla, sumas (y sus mínimos y máximos), coberturas opcionales, campos del cliente, monedas y períodos de precio | `datos/planes-hogar.json`, `datos/planes-vida.json`, `datos/planes-ap.json`, `datos/planes-comercio.json` (un solo motor para los cuatro: tipos y reglas en `src/lib/ramos.ts`, pantalla en `src/components/CotizadorRamo.tsx`, PDF en `src/pdf/RamoPDF.tsx`). Los `nota_interna` son avisos para quien edita y no salen en ningún lado |
 | Granizo: tasas por departamento (granizo, granizo + viento y granizo + viento + helada), topes de quintales para viento y helada y recargos por provincia, forma de pago y condición fiscal | `datos/granizo.json` (el cálculo, las franquicias, resiembras y vigencias están en `src/lib/granizo.ts`; pantalla en `src/components/CotizadorGranizo.tsx`, PDF en `src/pdf/GranizoPDF.tsx`) |
 | Retiro: tasas de proyección y garantizada, aportes, edades, gastos, rescates, rendimiento de la cartera, textos oficiales y tabla de factores de renta | `datos/retiro.json` (el cálculo está en `src/lib/retiro.ts`) |
 
 Los planes se relevaron de la web pública de La Segunda (lasegunda.com.ar/seguros-para-autos) el 20/10/2026. Si La Segunda cambia planes, coberturas o límites de Responsabilidad Civil, hay que actualizar `datos/planes-auto.json`.
+
+Hogar, Vida, Accidentes y Comercio se relevaron el 18/11/2026 de las páginas de cada ramo en lasegunda.com.ar. Los textos de las coberturas salen de la API pública que usa esa web (`https://wwwlasegundal2prodnj-api.azurewebsites.net/api/common/plan?route=<plan>`; cada JSON dice en `fuente` qué rutas). Hay algunos textos propios de la agencia donde La Segunda no publica explicación (en Accidentes: muerte, incapacidad y renta diaria), marcados con `nota_interna`. Ramos que quedaron afuera a propósito: embarcaciones, aeronavegación, transporte, ART, caución, técnico y TRO. Maquinaria agrícola usa los planes de Auto.
 
 Granizo: el ajuste de la franquicia 5% en zonas de franquicia obligatoria se calibró con una sola cotización real (Conhelo, girasol, prima $ 3.446.706,90). Las tres tablas de tasas se contrastaron celda por celda con los PDF de tarifas de la campaña 26-27. **Pendiente:** Corrientes figura en las tarifas pero no en los recargos financieros, así que muestra solo la prima. Planchado y Reconocimiento de daño no se calculan (la extra prima de Planchado se carga a mano). Los descuentos de ciclo productivo (5%, y 3% más en maíz con ciclo productivo plus) se cargan dentro del descuento de La Segunda.
 
@@ -49,7 +57,7 @@ El sitio es 100% estático: `npm run build` genera la carpeta `out/`. El workflo
 
 1. En el repo, entrá a **Settings → Pages** y, en **Build and deployment → Source**, elegí **GitHub Actions**.
 2. Hacé un push a `main` o corré el workflow a mano desde **Actions → Publicar en GitHub Pages → Run workflow**.
-3. Queda en https://tomasbasso.github.io/CotizadorAutomoviles/ (auto), https://tomasbasso.github.io/CotizadorAutomoviles/retiro/ (retiro), https://tomasbasso.github.io/CotizadorAutomoviles/granizo/ (granizo) y https://tomasbasso.github.io/CotizadorAutomoviles/simulador-retiro/ (simulador para clientes).
+3. Queda en https://tomasbasso.github.io/CotizadorAutomoviles/ (auto), https://tomasbasso.github.io/CotizadorAutomoviles/hogar/ (y lo mismo con `/vida/`, `/accidentes-personales/` y `/comercio/`), https://tomasbasso.github.io/CotizadorAutomoviles/retiro/ (retiro), https://tomasbasso.github.io/CotizadorAutomoviles/granizo/ (granizo) y https://tomasbasso.github.io/CotizadorAutomoviles/simulador-retiro/ (simulador para clientes).
 
 El prefijo `/CotizadorAutomoviles` lo pone el workflow con `NEXT_PUBLIC_BASE_PATH`, así que en local no hace falta configurar nada.
 

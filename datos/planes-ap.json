@@ -1,0 +1,229 @@
+{
+  "ramo": "ap",
+  "nombre": "Accidentes Personales",
+  "fuente": "https://www.lasegunda.com.ar/seguros-accidentes-personales (web pública; textos de https://wwwlasegundal2prodnj-api.azurewebsites.net/api/common/plan?route=24-horas y premium)",
+  "relevado": "2026-11-18",
+  "nota_interna": "La web del Plan Especial dice 'Desde los 16 a los 80 años: Cobertura Completa' y también '66 a 80 años: Muerte, Invalidez y Asistencia Médico Farmacéutica'. Se imprime tal cual, sin interpretar. En el Plan Especial la asistencia médico farmacéutica figura como adicional; en el Premium viene incluida.",
+  "cotizacion": {
+    "titulo": "Nueva cotización de accidentes personales",
+    "bajada": "Cargá el cliente, elegí hasta 3 opciones con sus sumas aseguradas y poné el precio de cada una.",
+    "asunto": "Seguro de accidentes personales",
+    "saludo": "te paso la cotización del seguro de accidentes personales",
+    "introGlosario": "Las coberturas de tu cotización, en pocas palabras. Lo que vale es lo que dicen las condiciones de la póliza de La Segunda.",
+    "campos": [
+      {
+        "id": "actividad",
+        "etiqueta": "Ocupación o actividad",
+        "placeholder": "Ej.: Productor agropecuario"
+      },
+      {
+        "id": "edad",
+        "etiqueta": "Edad",
+        "placeholder": "Ej.: 42",
+        "tipo": "edad",
+        "min": 16,
+        "max": 80,
+        "avisoMin": "Se puede asegurar desde los 16 años.",
+        "avisoMax": "Se puede asegurar hasta los 80 años."
+      },
+      {
+        "id": "vigencia",
+        "etiqueta": "Vigencia",
+        "placeholder": "Ej.: 6 meses",
+        "sugerencias": [
+          "1 mes",
+          "3 meses",
+          "6 meses"
+        ]
+      }
+    ],
+    "monedas": [
+      "ars"
+    ],
+    "periodos": [
+      "mes",
+      "vigencia"
+    ]
+  },
+  "coberturas": {
+    "muerte": {
+      "nombre": "Muerte por accidente",
+      "detalle": "Si el asegurado muere a causa de un accidente, se paga la suma asegurada a sus beneficiarios.",
+      "nota_interna": "La web no trae texto para muerte, incapacidad ni renta diaria: el detalle es una explicación breve de la agencia."
+    },
+    "incapacidad": {
+      "nombre": "Incapacidad por accidente",
+      "detalle": "Si un accidente le deja al asegurado una incapacidad permanente, se indemniza según la suma asegurada y las condiciones de la póliza."
+    },
+    "asistencia": {
+      "nombre": "Asistencia médico farmacéutica",
+      "detalle": "Gastos médicos y de farmacia por un accidente, hasta la suma asegurada. En el Plan Especial es un adicional; en el Plan Premium viene incluida. Coordinación de prestaciones médicas hasta el día de alta de la persona accidentada, con el respaldo de una red de prestadores presente en todo el país (solo para pólizas con asistencia médica prestacional)."
+    },
+    "renta": {
+      "nombre": "Renta diaria",
+      "detalle": "Monto por día que se paga durante la recuperación de un accidente, según las condiciones de la póliza."
+    },
+    "sepelio": {
+      "nombre": "Sepelio",
+      "detalle": "Sepelio en caso de muerte por accidente: $1.500.000."
+    }
+  },
+  "grupos": [
+    {
+      "nombre": "Sumas aseguradas",
+      "filas": [
+        {
+          "id": "muerte",
+          "nombre": "Muerte por accidente",
+          "cobertura": "muerte",
+          "suma": true,
+          "requerida": true,
+          "destacada": true,
+          "limites": {
+            "especial": [
+              22000000,
+              150000000
+            ],
+            "premium": [
+              19000000,
+              150000000
+            ]
+          }
+        },
+        {
+          "id": "incapacidad",
+          "nombre": "Incapacidad por accidente",
+          "cobertura": "incapacidad",
+          "suma": true,
+          "limites": {
+            "especial": [
+              22000000,
+              150000000
+            ],
+            "premium": [
+              19000000,
+              150000000
+            ]
+          }
+        },
+        {
+          "id": "asistencia",
+          "nombre": "Asistencia médico farmacéutica",
+          "cobertura": "asistencia",
+          "suma": true,
+          "limites": {
+            "especial": [
+              19000000,
+              135000000
+            ],
+            "premium": [
+              19000000,
+              150000000
+            ]
+          },
+          "opcional": [
+            "especial"
+          ]
+        },
+        {
+          "id": "renta",
+          "nombre": "Renta diaria",
+          "cobertura": "renta",
+          "suma": true,
+          "unidad": "por día",
+          "limites": {
+            "especial": [
+              1000,
+              50000
+            ],
+            "premium": [
+              1000,
+              50000
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "nombre": "Incluido",
+      "filas": [
+        {
+          "id": "sepelio",
+          "nombre": "Sepelio por muerte accidental",
+          "cobertura": "sepelio",
+          "fijo": "$ 1.500.000"
+        }
+      ]
+    }
+  ],
+  "planes": [
+    {
+      "codigo": "especial",
+      "nombre": "Plan Especial",
+      "tipo": "Accidentes personales",
+      "coberturas": [
+        "muerte",
+        "incapacidad",
+        "asistencia",
+        "renta",
+        "sepelio"
+      ],
+      "sobre": {
+        "titular": "Una cobertura por el tiempo que necesites",
+        "intro": "Todas las coberturas se pueden tomar tanto de forma individual como colectiva.",
+        "vinetas": [
+          {
+            "titulo": "Edades",
+            "texto": "Desde los 16 a los 80 años: Cobertura Completa. 66 a 80 años: Muerte, Invalidez y Asistencia Médico Farmacéutica."
+          },
+          {
+            "titulo": "",
+            "texto": "Te cubre desde 1 día hasta 6 meses, según tu necesidad."
+          },
+          {
+            "titulo": "",
+            "texto": "Estás protegido en todo momento, sin limitación de horario y en todo el mundo."
+          },
+          {
+            "titulo": "",
+            "texto": "Coordinación de prestaciones médicas hasta el día de alta de la persona accidentada, con el respaldo de una red de prestadores presente en todo el país (solo para pólizas con asistencia médica prestacional)."
+          }
+        ]
+      }
+    },
+    {
+      "codigo": "premium",
+      "nombre": "Plan Premium",
+      "tipo": "Más protección",
+      "coberturas": [
+        "muerte",
+        "incapacidad",
+        "asistencia",
+        "renta",
+        "sepelio"
+      ],
+      "sobre": {
+        "titular": "Más protección con tu Plan Premium",
+        "intro": "El Plan Premium puede contratarse tanto de forma individual como colectiva.",
+        "vinetas": [
+          {
+            "titulo": "Edades",
+            "texto": "Se puede tomar desde los 16 hasta los 80 años."
+          },
+          {
+            "titulo": "",
+            "texto": "Te cubre desde 1 día hasta 6 meses, según tu necesidad."
+          },
+          {
+            "titulo": "",
+            "texto": "Está protegido en todo momento, sin limitación de horario y en todo el mundo."
+          },
+          {
+            "titulo": "",
+            "texto": "Coordinación de prestaciones médicas hasta el día de alta de la persona accidentada, con el respaldo de una red de prestadores presente en todo el país (solo para pólizas con asistencia médica prestacional)."
+          }
+        ]
+      }
+    }
+  ]
+}

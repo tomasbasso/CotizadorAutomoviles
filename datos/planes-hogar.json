@@ -1,0 +1,347 @@
+{
+  "ramo": "hogar",
+  "nombre": "Hogar",
+  "fuente": "https://www.lasegunda.com.ar/seguros-para-hogar (web pública; textos de https://wwwlasegundal2prodnj-api.azurewebsites.net/api/common/plan?route=hogar-selecto, vivienda-de-alquiler y vivienda-transitoria)",
+  "relevado": "2026-11-18",
+  "cotizacion": {
+    "titulo": "Nueva cotización de hogar",
+    "bajada": "Cargá el cliente y la vivienda, elegí hasta 3 planes y poné el precio de cada uno. Las sumas aseguradas son opcionales.",
+    "asunto": "Seguro de hogar",
+    "saludo": "te paso la cotización del seguro de tu casa",
+    "campos": [
+      {
+        "id": "ubicacion",
+        "etiqueta": "Vivienda",
+        "placeholder": "Ej.: San Martín 450, Winifreda",
+        "requerido": "la dirección de la vivienda"
+      }
+    ],
+    "monedas": [
+      "ars"
+    ],
+    "periodos": [
+      "mes",
+      "cuatrimestre",
+      "semestre",
+      "año"
+    ]
+  },
+  "coberturas": {
+    "incendio": {
+      "nombre": "Incendio edificio y contenido",
+      "detalle": "Daños materiales causados por la acción directa o indirecta del fuego, rayo o explosión y la acción directa de hechos de vandalismo, malevolencia, tumulto popular, huelga, lockout, humo, impactos de aeronaves, impacto de vehículos terrestres, sus partes componentes y/o su carga transportada.\nAdicional: Vendaval, Tornado, Ciclón, Huracán, Granizo y Terremoto."
+    },
+    "robo_contenido": {
+      "nombre": "Robo contenido general",
+      "detalle": "Robo y/o Hurto del mobiliario y ajuar personal del Asegurado.",
+      "porPlan": {
+        "alquiler": "Robo del mobiliario y ajuar personal del Asegurado."
+      }
+    },
+    "rc_hechos_privados": {
+      "nombre": "Responsabilidad civil por hechos privados",
+      "detalle": "La Aseguradora se obliga mantener indemne al Asegurado por cuanto deba a un tercero, en razón de la responsabilidad civil, en que incurra exclusivamente como consecuencia de hechos imputables a la vida privada del Asegurado y/o su cónyuge. Siempre que conviva con él y/o cualquier otra persona por quien el Asegurado sea legalmente responsable, en su ámbito familiar y en todo el mundo.",
+      "porPlan": {
+        "alquiler": "La Aseguradora se obliga a mantener indemne al propietario del inmueble cedido en alquiler y al inquilino de dicho inmueble, en razón de la responsabilidad civil que surja de la violación del deber de no dañar a otro (Art.1716 del Código Civil y Comercial de la Nación), en que incurran exclusivamente como consecuencia de hechos imputables al propietario o al inquilino, sus cónyuges y/o cualquier otras personas por quienes sean legalmente responsables y siempre que convivan con ellos en su ámbito familiar.",
+        "transitoria": "La Aseguradora se obliga a mantener indemne al propietario del inmueble cedido en alquiler y al inquilino de dicho inmueble, en razón de la responsabilidad civil que surja de la violación del deber de no dañar a otro (Art.1716 del Código Civil y Comercial de la Nación), en que incurran exclusivamente como consecuencia de hechos imputables al propietario o al inquilino, sus cónyuges y/o cualquier otras personas por quienes sean legalmente responsables y siempre que convivan con ellos en su ámbito familiar."
+      }
+    },
+    "cristales": {
+      "nombre": "Cristales",
+      "detalle": "Daños ocasionados a cristales, vidrios, espejos y demás piezas vítreas o similares, instalados en la vivienda, como consecuencia de su rotura o rajadura.\nSe contemplan los gastos de colocación."
+    },
+    "agua": {
+      "nombre": "Daños por agua e inundación",
+      "detalle": "Daños al edificio y mobiliario producidos por la acción directa del agua en forma accidental, súbita e imprevista, originados por:\n• Obstrucciones y/o roturas de la instalación del edificio asegurado\n• Inundaciones\n• Daños por congelamiento"
+    },
+    "deportivos": {
+      "nombre": "Equipos deportivos en tránsito",
+      "detalle": "Robo o incendio exclusivamente sobre los equipos o implementos deportivos que se hallen en la vivienda asegurada o en tránsito en todo el mundo y que sean de su propiedad o de los miembros de su familia que convivan con él."
+    },
+    "musicales": {
+      "nombre": "Instrumentos musicales en tránsito",
+      "detalle": "Robo o incendio exclusivamente sobre los Instrumentos Musicales y accesorios que se hallen en la vivienda asegurada o en tránsito en todo el mundo y que sean de su propiedad o de los miembros de su familia que convivan con él."
+    },
+    "bicicletas": {
+      "nombre": "Bicicletas en tránsito",
+      "detalle": "Robo o incendio exclusivamente sobre la/s bicicleta/s con pedaleo asistido o propulsión auxiliar equipada/s con motor eléctrico, y/o monopatín eléctrico, que se encuentre/n en la vivienda asegurada o en tránsito en todo el mundo y que sean de su propiedad o de los miembros de su familia que convivan con él."
+    },
+    "bolso": {
+      "nombre": "Bolso protegido",
+      "detalle": "Cobertura de la pérdida por robo o incendio exclusivamente a: bolso, dinero en efectivo, anteojos, cosméticos, perfumes, teléfonos celulares/reproductor, audio/multimedia, reembolso de llaves, gastos de movilidad o traslado."
+    },
+    "cajeros": {
+      "nombre": "Robo cajeros automáticos",
+      "detalle": "Robo de dinero en efectivo retirado del cajero automático y hasta una distancia de 100 metros del mismo, con cobertura en todo el mundo."
+    },
+    "electronicos_transito": {
+      "nombre": "Robo electrónicos en tránsito",
+      "detalle": "Robo o incendio exclusivamente sobre los equipos electrónicos que se hallen en la vivienda asegurada o en tránsito en todo el mundo y que sean de su propiedad o de los miembros de su familia que convivan con él."
+    },
+    "electronicos": {
+      "nombre": "Equipos electrónicos",
+      "detalle": "Incendio, robo, hurto y accidentes de los equipos electrónicos que se hallen en la vivienda asegurada y que sean de su propiedad o de los miembros de su familia que convivan con él."
+    },
+    "danos_robo": {
+      "nombre": "Daños por robo",
+      "detalle": "Cobertura de los daños ocasionados por robo o tentativa de robo al edificio y/o contenido."
+    },
+    "golf": {
+      "nombre": "Jugadores de golf",
+      "detalle": "Robo o incendio exclusivamente sobre el equipo de golf que se hallen en la vivienda asegurada o en tránsito y que sean de su propiedad o de los miembros de su familia que convivan con él."
+    },
+    "solares": {
+      "nombre": "Paneles y termotanques solares; Antenas satelitales",
+      "detalle": "Paneles solares fotovoltaicos con sus respectivos inversores de corriente y demás accesorios destinados al funcionamiento del equipo; termotanques solares y/o antenas de conexión satelital.\nFranquicia: 10% del monto a indemnizar."
+    },
+    "celulares": {
+      "nombre": "Equipos celulares",
+      "detalle": "Robo, incendio o daños por accidente exclusivamente sobre los equipos celulares que se hallen en la vivienda asegurada o en tránsito en todo el mundo y que sean de su propiedad o de los miembros de su familia que convivan con él."
+    },
+    "robo_inquilinos": {
+      "nombre": "Robo bienes de inquilinos",
+      "detalle": "La Aseguradora indemnizará al Asegurado la pérdida exclusivamente por robo de pertenencias de inquilinos o pasajeros en la vivienda asegurada"
+    },
+    "perdida_alquiler": {
+      "nombre": "Pérdida de alquiler",
+      "detalle": "Cuando la vivienda asegurada se encuentre inhabitable a raíz de un siniestro cubierto en póliza, la Aseguradora indemnizará al Asegurado por los alquileres no percibidos."
+    },
+    "gastos_alojamiento": {
+      "nombre": "Gastos de alquiler y/o alojamiento",
+      "detalle": "Cuando la vivienda asegurada se encuentre inhabitable a raíz de un siniestro cubierto en póliza, la Aseguradora indemnizará al Inquilino por los gastos de alojamiento de hotel y/o alquiler de una vivienda."
+    },
+    "rc_linderos": {
+      "nombre": "Responsabilidad civil linderos",
+      "detalle": "La Aseguradora se obliga a mantener indemne al Asegurado en razón de la responsabilidad civil que surja de la violación del deber de no dañar a otro, en que incurra exclusivamente como consecuencia de la acción directa o indirecta del fuego y/o explosión"
+    },
+    "incluidas": {
+      "nombre": "Coberturas incluidas sin cargo",
+      "detalle": "En caso de siniestro:\n• Gastos de limpieza y remoción de escombros\n• Gastos de hotelería/alquiler\n• Gastos de mudanza\n• Honorarios profesionales\n• Daños al edificio y contenido por robo\n• Incendio y robo de vestimenta personal en vacaciones\n• Robo de bienes en bauleras\n• Gastos de reposición de documentos (DNI, pasaporte, etcétera)\n• Pago de alquileres",
+      "nota_interna": "La API la trae a nivel de rama, pero la web solo la muestra en la página de Hogar Selecto."
+    }
+  },
+  "grupos": [
+    {
+      "nombre": "Incendio y daños",
+      "filas": [
+        {
+          "id": "incendio_edificio",
+          "nombre": "Incendio del edificio",
+          "cobertura": "incendio",
+          "suma": true
+        },
+        {
+          "id": "incendio_contenido",
+          "nombre": "Incendio del contenido",
+          "cobertura": "incendio",
+          "suma": true
+        },
+        {
+          "id": "agua",
+          "nombre": "Daños por agua e inundación",
+          "cobertura": "agua",
+          "suma": true
+        },
+        {
+          "id": "cristales",
+          "nombre": "Cristales",
+          "cobertura": "cristales",
+          "suma": true
+        },
+        {
+          "id": "solares",
+          "nombre": "Paneles solares y antenas",
+          "cobertura": "solares"
+        }
+      ]
+    },
+    {
+      "nombre": "Robo",
+      "filas": [
+        {
+          "id": "robo_contenido",
+          "nombre": "Robo del contenido",
+          "cobertura": "robo_contenido",
+          "suma": true
+        },
+        {
+          "id": "danos_robo",
+          "nombre": "Daños por robo",
+          "cobertura": "danos_robo"
+        },
+        {
+          "id": "robo_inquilinos",
+          "nombre": "Robo de bienes de inquilinos",
+          "cobertura": "robo_inquilinos"
+        },
+        {
+          "id": "cajeros",
+          "nombre": "Robo en cajeros automáticos",
+          "cobertura": "cajeros"
+        }
+      ]
+    },
+    {
+      "nombre": "Responsabilidad civil",
+      "filas": [
+        {
+          "id": "rc_hechos_privados",
+          "nombre": "Por hechos privados",
+          "cobertura": "rc_hechos_privados",
+          "suma": true
+        },
+        {
+          "id": "rc_linderos",
+          "nombre": "A linderos (incendio)",
+          "cobertura": "rc_linderos",
+          "suma": true
+        }
+      ]
+    },
+    {
+      "nombre": "Equipos y objetos",
+      "filas": [
+        {
+          "id": "electronicos",
+          "nombre": "Equipos electrónicos",
+          "cobertura": "electronicos",
+          "suma": true
+        },
+        {
+          "id": "electronicos_transito",
+          "nombre": "Electrónicos en tránsito",
+          "cobertura": "electronicos_transito"
+        },
+        {
+          "id": "celulares",
+          "nombre": "Celulares",
+          "cobertura": "celulares",
+          "suma": true
+        },
+        {
+          "id": "bicicletas",
+          "nombre": "Bicicletas y monopatines eléctricos",
+          "cobertura": "bicicletas"
+        },
+        {
+          "id": "deportivos",
+          "nombre": "Equipos deportivos",
+          "cobertura": "deportivos"
+        },
+        {
+          "id": "musicales",
+          "nombre": "Instrumentos musicales",
+          "cobertura": "musicales"
+        },
+        {
+          "id": "golf",
+          "nombre": "Equipo de golf",
+          "cobertura": "golf"
+        },
+        {
+          "id": "bolso",
+          "nombre": "Bolso protegido",
+          "cobertura": "bolso"
+        }
+      ]
+    },
+    {
+      "nombre": "Si la vivienda queda inhabitable",
+      "filas": [
+        {
+          "id": "perdida_alquiler",
+          "nombre": "Pérdida de alquiler",
+          "cobertura": "perdida_alquiler"
+        },
+        {
+          "id": "gastos_alojamiento",
+          "nombre": "Alojamiento del inquilino",
+          "cobertura": "gastos_alojamiento"
+        }
+      ]
+    },
+    {
+      "nombre": "Sin cargo",
+      "filas": [
+        {
+          "id": "incluidas",
+          "nombre": "Gastos en caso de siniestro (limpieza, hotel, mudanza y más)",
+          "cobertura": "incluidas"
+        }
+      ]
+    }
+  ],
+  "planes": [
+    {
+      "codigo": "selecto",
+      "nombre": "Hogar Selecto",
+      "tipo": "Multicobertura de vivienda",
+      "coberturas": [
+        "incendio",
+        "robo_contenido",
+        "rc_hechos_privados",
+        "cristales",
+        "agua",
+        "deportivos",
+        "musicales",
+        "bicicletas",
+        "bolso",
+        "cajeros",
+        "electronicos_transito",
+        "electronicos",
+        "danos_robo",
+        "golf",
+        "solares",
+        "celulares",
+        "incluidas"
+      ]
+    },
+    {
+      "codigo": "alquiler",
+      "nombre": "Vivienda de alquiler",
+      "tipo": "Para el dueño y el inquilino",
+      "coberturas": [
+        "electronicos",
+        "incendio",
+        "robo_inquilinos",
+        "perdida_alquiler",
+        "gastos_alojamiento",
+        "danos_robo",
+        "solares",
+        "rc_hechos_privados",
+        "rc_linderos",
+        "cristales",
+        "robo_contenido",
+        "agua"
+      ]
+    },
+    {
+      "codigo": "transitoria",
+      "nombre": "Vivienda transitoria",
+      "tipo": "Multicobertura de vivienda",
+      "coberturas": [
+        "incendio",
+        "robo_contenido",
+        "cristales",
+        "agua",
+        "electronicos",
+        "danos_robo",
+        "solares",
+        "rc_hechos_privados",
+        "rc_linderos"
+      ]
+    }
+  ],
+  "servicios": [
+    {
+      "nombre": "Asistencia al viajero",
+      "detalle": "Tu cobertura del hogar incluye una completa asistencia para cuando te trasladás a cualquier otro lugar del mundo: traslado sanitario en Argentina por accidente, asistencia médica en el exterior por lesión o enfermedad, odontología de urgencia, reintegro y envío de medicamentos, extravío de equipaje y asistencia jurídica en el extranjero. Lesión o enfermedad en el exterior hasta U$S 18.000 por cada integrante del grupo familiar; si tenés asegurado tu auto con LA SEGUNDA, asciende a U$S 36.000.",
+      "fuente": "https://www.lasegunda.com.ar/asistencia-al-viajero"
+    },
+    {
+      "nombre": "Urgencias domiciliarias",
+      "detalle": "Atención inmediata en tu domicilio los 365 días del año, las 24 horas, en emergencias de cerrajería, plomería, gas y electricidad. 0-800-888-0001.",
+      "fuente": "https://www.lasegunda.com.ar/urgencias-domiciliarias-seguro-hogar"
+    }
+  ]
+}
